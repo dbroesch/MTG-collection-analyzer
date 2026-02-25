@@ -123,6 +123,12 @@ def get_missing_cards(filename: str) -> list[pd.DataFrame]:
         missing_df = full_set_df[~full_set_df["id"].astype(str).isin(collection_ids)]
         missing_dfs.append(missing_df.reset_index(drop=True))
 
+        # Debug output
+        set_size = len(full_set_df)
+        in_collection = len(collection_df)
+        missing_count = len(missing_df)
+        print(f"[DEBUG] {edition_name}: set={set_size} | in_collection={in_collection} | missing={missing_count}")
+
     return missing_dfs
 
 
