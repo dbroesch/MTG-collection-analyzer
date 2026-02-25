@@ -79,6 +79,14 @@ for df in missing_dfs:
 
 If your CSV has cards from multiple sets, `get_missing_cards` returns one DataFrame per set, each with only the missing cards for that set.
 
+## Purchasing missing cards
+
+Use the missing cards list from the script to quickly add them to a cart on [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder):
+
+1. Run the script or use `get_missing_cards` in Python/Jupyter to get your missing cards.
+2. Copy the card names from the `name` column (one per line, or in a format Card Kingdom accepts).
+3. Paste into the [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder) to build a list and purchase the missing cards in one order.
+
 ## Project structure
 
 ```
