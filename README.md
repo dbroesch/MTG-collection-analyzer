@@ -21,6 +21,16 @@ pip install pandas
 
    This creates `set_names.json` with all set names and codes from Scryfall.
 
+## Getting your collection file
+
+You can export your collection as a CSV from [Archidekt](https://archidekt.com/):
+
+1. Log in to Archidekt and go to your **Collection**
+2. Use the export option to download your collection as CSV
+3. Save the file to the `collections/` directory
+
+The exported CSV should include **Edition Name** and **Scryfall ID** columns for the analyzer to work.
+
 ## Collection CSV Format
 
 Place your collection export in the `collections/` directory. The CSV must include:
