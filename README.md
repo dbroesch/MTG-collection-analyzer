@@ -105,7 +105,6 @@ Use the missing cards list from the script to add them to a cart on your preferr
 ├── set_names.json             # Set name → code lookup (generated)
 ├── collections/               # Your collection CSV files
 │   ├── collection_2_25_26.csv
-│   ├── visions_collection_2_24_26.csv
 │   └── ...
 └── README.md
 ```

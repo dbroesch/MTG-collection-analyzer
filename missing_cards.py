@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).parent
 COLLECTIONS_DIR = BASE_DIR / "collections"
 SET_NAMES_FILE = BASE_DIR / "set_names.json"
 
-
+## API connector
 class ScryfallClient:
     """Scryfall API client. Uses stdlib urllib."""
 
@@ -96,16 +96,7 @@ def _pull_set_cards(set_name: str) -> pd.DataFrame:
 
     return pd.DataFrame(all_cards)
 
-
-def load_collection_csv(filename: str) -> list[pd.DataFrame]:
-    """Load a CSV, split by edition. Returns list of DataFrames, one per set."""
-    path = COLLECTIONS_DIR / filename
-    if not path.exists():
-        raise FileNotFoundError(f"CSV not found: {path}")
-    df = pd.read_csv(path)
-    return [group.reset_index(drop=True) for _, group in df.groupby("Edition Name")]
-
-
+## Main Function
 def get_missing_cards(
     filename: str,
     format: str | None = None,
@@ -142,6 +133,16 @@ def get_missing_cards(
     if format and format.lower() == "card_kingdom":
         return cardkingdom_format(missing_dfs)
     return missing_dfs
+
+## helper functions
+def load_collection_csv(filename: str) -> list[pd.DataFrame]:
+    """Load a CSV, split by edition. Returns list of DataFrames, one per set."""
+    path = COLLECTIONS_DIR / filename
+    if not path.exists():
+        raise FileNotFoundError(f"CSV not found: {path}")
+    df = pd.read_csv(path)
+    return [group.reset_index(drop=True) for _, group in df.groupby("Edition Name")]
+
 
 
 def starcity_format(missing_dfs: list[pd.DataFrame]) -> dict[str, str]:
@@ -185,7 +186,7 @@ if __name__ == "__main__":
             json.dump(name_to_code, f, indent=2, ensure_ascii=False)
         print(f"Saved {len(name_to_code)} sets to {SET_NAMES_FILE}")
     else:
-        filename = sys.argv[1] if len(sys.argv) > 1 else "visions_collection_2_24_26.csv"
+        filename = sys.argv[1] if len(sys.argv) > 1 else "collection_2_25_26.csv"
         for df in get_missing_cards(filename):
             edition = df["set_name"].iloc[0] if len(df) > 0 else "?"
             print(f"Missing from {edition}: {len(df)} cards")
