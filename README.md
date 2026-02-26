@@ -1,6 +1,6 @@
 # MTG Collection Analyzer
 
-Compare your Magic: The Gathering collection against full set data from the [Scryfall API](https://scryfall.com/docs/api) to see which cards you're missing from each set.
+Compare your Magic: The Gathering collection against full set data from the [Scryfall API](https://scryfall.com/docs/api) to see which cards you're missing from each set. Outputs a Dataframe in either Starcity Games deck builder format or Card Kingdom format for easy purchasing!
 
 ## Requirements
 
