@@ -48,7 +48,7 @@ Example columns: `Name`, `Condition`, `Language`, `Edition Name`, `Edition Code`
 python missing_cards.py collection_2_25_26.csv
 ```
 
-Or with the default file (`visions_collection_2_24_26.csv`):
+Or with the default file (`collection_2_25_26.csv`):
 
 ```bash
 python missing_cards.py
