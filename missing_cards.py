@@ -106,12 +106,20 @@ def load_collection_csv(filename: str) -> list[pd.DataFrame]:
     return [group.reset_index(drop=True) for _, group in df.groupby("Edition Name")]
 
 
-def get_missing_cards(filename: str) -> list[pd.DataFrame]:
+def get_missing_cards(
+    filename: str,
+    format: str | None = None,
+) -> list[pd.DataFrame] | dict[str, str]:
     """
     For each set in the collection CSV, return the cards you're missing.
 
-    Returns a list of DataFrames, one per set, each containing full card data
-    for the cards you don't have from that set.
+    Args:
+        filename: Path to collection CSV.
+        format: If "starcity" or "card_kingdom", return a dict (set name -> string of cards)
+                instead of list of DataFrames. Otherwise return list of DataFrames.
+
+    Returns:
+        List of DataFrames (default), or dict from starcity_format/cardkingdom_format.
     """
     collection_dfs = load_collection_csv(filename)
     missing_dfs = []
@@ -129,7 +137,43 @@ def get_missing_cards(filename: str) -> list[pd.DataFrame]:
         missing_count = len(missing_df)
         print(f"[DEBUG] {edition_name}: set={set_size} | in_collection={in_collection} | missing={missing_count}")
 
+    if format and format.lower() == "starcity":
+        return starcity_format(missing_dfs)
+    if format and format.lower() == "card_kingdom":
+        return cardkingdom_format(missing_dfs)
     return missing_dfs
+
+
+def starcity_format(missing_dfs: list[pd.DataFrame]) -> dict[str, str]:
+    """
+    Convert output of get_missing_cards to a dict: set name -> string of cards.
+
+    Each card is formatted as "{card name} ({set_code})" and cards are newline-separated.
+    """
+    result = {}
+    for df in missing_dfs:
+        if len(df) == 0:
+            continue
+        set_name = df["set_name"].iloc[0]
+        lines = [f"{row['name']} ({row['set']})" for _, row in df.iterrows()]
+        result[set_name] = "\n".join(lines)
+    return result
+
+
+def cardkingdom_format(missing_dfs: list[pd.DataFrame]) -> dict[str, str]:
+    """
+    Convert output of get_missing_cards to a dict: set name -> string of card names.
+
+    Values are newline-separated card names only (no set suffix).
+    """
+    result = {}
+    for df in missing_dfs:
+        if len(df) == 0:
+            continue
+        set_name = df["set_name"].iloc[0]
+        lines = [row["name"] for _, row in df.iterrows()]
+        result[set_name] = "\n".join(lines)
+    return result
 
 
 if __name__ == "__main__":

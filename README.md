@@ -63,16 +63,22 @@ When run, `get_missing_cards` prints debug output for each set: set name, total 
 
 ### Python / Jupyter
 
+`get_missing_cards` takes an optional second argument (`format`). When omitted or `None`, it returns a list of DataFrames (raw card data per set). When set to `"starcity"` or `"card_kingdom"`, it returns a dictionary formatted for pasting into those deck builders.
+
 ```python
 from missing_cards import get_missing_cards, load_collection_csv
 
-# Get DataFrames of missing cards (one per set in your collection)
-# Prints debug stats per set: set name, total cards, in collection, missing
+# Default: list of DataFrames (one per set)
 missing_dfs = get_missing_cards("collection_2_25_26.csv")
-
 for df in missing_dfs:
     print(f"Missing: {len(df)} cards")
     print(df[["name", "collector_number", "rarity"]].head())
+
+# Formatted for Star City Games deck builder: set name -> "Card Name (set_code)"
+starcity_format = get_missing_cards("collection_2_25_26.csv", format="starcity")
+
+# Formatted for Card Kingdom deck builder: set name -> card names only
+ck_format = get_missing_cards("collection_2_25_26.csv", format="card_kingdom")
 ```
 
 ### Multiple sets
@@ -81,11 +87,14 @@ If your CSV has cards from multiple sets, `get_missing_cards` returns one DataFr
 
 ## Purchasing missing cards
 
-Use the missing cards list from the script to quickly add them to a cart on [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder):
+Use the missing cards list from the script to add them to a cart on your preferred deck builder:
 
-1. Run the script or use `get_missing_cards` in Python/Jupyter to get your missing cards.
-2. Copy the card names from the `name` column (one per line, or in a format Card Kingdom accepts).
-3. Paste into the [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder) to build a list and purchase the missing cards in one order.
+- **Card Kingdom** – Use `format="card_kingdom"` to get card names only. Paste into the [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder).
+- **Star City Games** – Use `format="starcity"` to get `Card Name (set_code)` format. Paste into the [Star City Games Deck Builder](https://starcitygames.com/shop/deck-builder/).
+
+1. Run `get_missing_cards("your_collection.csv", format="card_kingdom")` or `format="starcity"`.
+2. Copy the string for the set you want (e.g. `result["Visions"]`).
+3. Paste into the deck builder to build a list and purchase.
 
 ## Project structure
 
