@@ -111,4 +111,6 @@ Use the missing cards list from the script to add them to a cart on your preferr
 
 ## License
 
-Uses card data from [Scryfall](https://scryfall.com) under their [Fan Content Policy](https://company.wizards.com/fancontentpolicy).
+**MTG Collection Analyzer** – You may use this script for any purpose, personal or commercial. Attribution is required: credit the original author and/or this repository when you use, modify, or distribute it.
+
+**Card data** – Uses card data from [Scryfall](https://scryfall.com) under their [Fan Content Policy](https://company.wizards.com/fancontentpolicy).
