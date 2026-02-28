@@ -829,13 +829,14 @@
             text-decoration: underline;
         }
 
-        .coffee-btn {
+        .footer .coffee-btn,
+        .footer a.coffee-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.875rem 1.5rem;
             background: #ffdd00;
-            color: #1a1a1a;
+            color: #000 !important;
             border-radius: 8px;
             font-weight: 700;
             font-size: 1rem;
@@ -845,18 +846,19 @@
             text-shadow: none;
         }
 
-        .coffee-btn:hover {
+        .footer .coffee-btn:hover,
+        .footer a.coffee-btn:hover {
             transform: translateY(-2px);
             background: #ffe433;
             box-shadow: 0 6px 25px rgba(255, 221, 0, 0.5);
             text-decoration: none;
-            color: #000;
+            color: #000 !important;
         }
 
-        .coffee-btn svg {
+        .footer .coffee-btn svg {
             width: 22px;
             height: 22px;
-            fill: #1a1a1a;
+            fill: #000;
         }
 
         /* Responsive */
