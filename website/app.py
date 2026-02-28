@@ -164,19 +164,23 @@ def get_missing_cards_from_upload(file_content: bytes) -> list[dict]:
                 starcity_lines.append(f"{row['name']} ({row['set']})")
                 
                 if price >= 50.0:
-                    image_uris = row.get("image_uris", {})
+                    row_dict = row.to_dict()
+                    image_uris = row_dict.get("image_uris")
+                    image_url = ""
                     if isinstance(image_uris, dict):
                         image_url = image_uris.get("normal") or image_uris.get("small") or ""
-                    else:
-                        image_url = ""
+                    
+                    scryfall_uri = row_dict.get("scryfall_uri", "")
+                    if pd.isna(scryfall_uri):
+                        scryfall_uri = ""
                     
                     expensive_cards.append({
                         "name": row["name"],
                         "price": price,
-                        "collector_number": row.get("collector_number", ""),
-                        "rarity": row.get("rarity", ""),
+                        "collector_number": row_dict.get("collector_number", ""),
+                        "rarity": row_dict.get("rarity", ""),
                         "image_url": image_url,
-                        "scryfall_url": row.get("scryfall_uri", ""),
+                        "scryfall_url": scryfall_uri,
                     })
             
             expensive_cards.sort(key=lambda x: x["price"], reverse=True)
