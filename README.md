@@ -1,8 +1,46 @@
 # MTG Collection Analyzer
 
-Compare your Magic: The Gathering collection against full set data from the [Scryfall API](https://scryfall.com/docs/api) to see which cards you're missing from each set. Outputs a Dataframe in either Starcity Games deck builder format or Card Kingdom format for easy purchasing!
+Compare your Magic: The Gathering collection against full set data from the [Scryfall API](https://scryfall.com/docs/api) to see which cards you're missing from each set. Available as both a command-line tool and a web application.
 
-## Requirements
+**Features:**
+- Upload your collection CSV and see missing cards per set
+- View collection value and cost to complete each set
+- Export in Card Kingdom or Star City Games format
+- Identify high-value missing cards ($50+)
+- Beautiful MTG-inspired web interface
+
+## Web Application
+
+The easiest way to use the analyzer is through the web interface.
+
+### Run Locally
+
+```bash
+cd website
+pip install -r requirements.txt
+python app.py
+```
+
+Open http://localhost:5000 in your browser.
+
+### Deploy to Render
+
+This repo includes a `render.yaml` for one-click deployment to [Render](https://render.com):
+
+1. Push this repo to GitHub
+2. Go to [render.com](https://render.com) → New → Web Service
+3. Connect your GitHub repo
+4. Render auto-detects the config and deploys
+
+Or configure manually:
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `cd website && gunicorn app:app`
+
+---
+
+## Command Line Usage
+
+### Requirements
 
 - Python 3.10+
 - pandas
@@ -11,7 +49,7 @@ Compare your Magic: The Gathering collection against full set data from the [Scr
 pip install pandas
 ```
 
-## Setup
+### Setup
 
 1. **Refresh set data** (run once, or when new sets release):
 
@@ -100,12 +138,18 @@ Use the missing cards list from the script to add them to a cart on your preferr
 
 ```
 .
-├── missing_cards.py           # Main script
+├── website/                   # Flask web application
+│   ├── app.py                 # Flask app (main entry point)
+│   ├── requirements.txt       # Web app dependencies
+│   └── templates/
+│       └── index.html         # Web UI
+├── missing_cards.py           # Command-line script
 ├── collection comparer.ipynb  # Jupyter notebook for analysis
 ├── set_names.json             # Set name → code lookup (generated)
 ├── collections/               # Your collection CSV files
-│   ├── collection_2_25_26.csv
 │   └── ...
+├── render.yaml                # Render deployment config
+├── requirements.txt           # Root dependencies (for deployment)
 └── README.md
 ```
 
