@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTG Collection Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --mana-white: #f8f6d8;
+            --mana-blue: #0e68ab;
+            --mana-black: #150b00;
+            --mana-red: #d3202a;
+            --mana-green: #00733e;
+            --gold: #c9a227;
+            --gold-light: #e6c84a;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --card-border: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hero Banner */
+        .hero {
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 3rem 2rem;
+            overflow: hidden;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(14, 104, 171, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(211, 32, 42, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(0, 115, 62, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 0%, rgba(201, 162, 39, 0.2) 0%, transparent 40%),
+                linear-gradient(180deg, #0a0a0a 0%, #151515 50%, #0d0d0d 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .hero-glow.gold {
+            background: var(--gold);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.4; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 40px rgba(201, 162, 39, 0.4),
+                0 0 80px rgba(201, 162, 39, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo-icon svg {
+            width: 45px;
+            height: 45px;
+            fill: var(--dark-bg);
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(201, 162, 39, 0.3);
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: #888;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* Mana symbols decoration */
+        .mana-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .mana-symbol {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .mana-symbol:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .mana-symbol.white { background: var(--mana-white); color: var(--mana-white); }
+        .mana-symbol.blue { background: var(--mana-blue); color: var(--mana-blue); }
+        .mana-symbol.black { background: #333; color: #333; box-shadow: 0 0 20px rgba(100,100,100,0.5); }
+        .mana-symbol.red { background: var(--mana-red); color: var(--mana-red); }
+        .mana-symbol.green { background: var(--mana-green); color: var(--mana-green); }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(201, 162, 39, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #3a3a3a;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .upload-area:hover {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.1);
+            box-shadow: 0 0 30px rgba(201, 162, 39, 0.2);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: grayscale(0.5);
+        }
+
+        .upload-area p {
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area p:first-of-type {
+            font-size: 1.1rem;
+            color: #aaa;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #a88520 100%);
+            color: #000;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(201, 162, 39, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: #ccc;
+            border: 1px solid #3a3a3a;
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 20px rgba(201, 162, 39, 0.2);
+        }
+
+        #fileName {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #2a2a2a;
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: #888;
+        }
+
+        .loading p:first-of-type {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+            margin-top: 3rem;
+        }
+
+        /* Toggle Buttons */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: #1a1a1a;
+            padding: 0.5rem;
+            border-radius: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: transparent;
+            color: #888;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .toggle-btn:hover {
+            color: #ccc;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--gold) 0%, #a88520 100%);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+        }
+
+        /* Summary Cards */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-item {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-item:hover {
+            border-color: #3a3a3a;
+            transform: translateY(-2px);
+        }
+
+        .summary-item h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-item h3.price {
+            color: #10b981;
+        }
+
+        .summary-item h3.price-missing {
+            color: #f59e0b;
+        }
+
+        .summary-item p {
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2.5rem 0 1.5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .section-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, #3a3a3a, transparent);
+        }
+
+        /* Set Cards */
+        .set-card {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .set-card:hover {
+            border-color: #3a3a3a;
+        }
+
+        .set-header {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(90deg, rgba(201, 162, 39, 0.1) 0%, transparent 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-left: 3px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .set-header:hover {
+            background: linear-gradient(90deg, rgba(201, 162, 39, 0.15) 0%, rgba(201, 162, 39, 0.05) 100%);
+        }
+
+        .set-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .set-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .stat {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .stat-value {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .set-body {
+            padding: 1.5rem;
+            display: none;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .set-body.open {
+            display: block;
+        }
+
+        .price-info {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.25rem;
+            padding: 1rem 1.25rem;
+            background: #111;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .price-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .price-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .price-value.collection {
+            color: #10b981;
+        }
+
+        .price-value.missing {
+            color: #f59e0b;
+        }
+
+        .card-list {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 1.25rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 1.25rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .card-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .card-list::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .card-list::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .error-msg {
+            background: linear-gradient(135deg, rgba(127, 29, 29, 0.5), rgba(127, 29, 29, 0.3));
+            border: 1px solid #991b1b;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        /* Expensive Cards Section */
+        .expensive-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        .expensive-card {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .expensive-header {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #8b5cf6;
+            transition: all 0.3s ease;
+        }
+
+        .expensive-header:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.15) 100%);
+        }
+
+        .expensive-set-name {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .expensive-count {
+            background: rgba(139, 92, 246, 0.3);
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #c4b5fd;
+        }
+
+        .expensive-body {
+            display: none;
+            padding: 1.25rem;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .expensive-body.open {
+            display: block;
+        }
+
+        .expensive-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .expensive-table th {
+            text-align: left;
+            padding: 0.875rem 1rem;
+            background: #111;
+            color: #666;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .expensive-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .expensive-table th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .expensive-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .expensive-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .expensive-table tr:hover td {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .expensive-table .card-name {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .expensive-table .card-price {
+            font-family: 'Cinzel', serif;
+            color: #fbbf24;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .expensive-table .card-rarity {
+            text-transform: capitalize;
+            color: #888;
+        }
+
+        .no-expensive {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+        }
+
+        /* How to Use Section */
+        .how-to-use {
+            margin-top: 2rem;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .how-to-use h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .how-to-use h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--gold) 0%, #a88520 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            color: #000;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .step a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .step a:hover {
+            text-decoration: underline;
+        }
+
+        .archidekt-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .archidekt-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .archidekt-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .csv-format {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+        }
+
+        .csv-format h4 {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .csv-format code {
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.8rem;
+            color: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #444;
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .summary-item:last-child {
+                grid-column: span 2;
+            }
+            
+            .set-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            
+            .set-stats {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .mana-bar {
+                gap: 0.5rem;
+            }
+
+            .mana-symbol {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Banner -->
+    <div class="hero">
+        <div class="hero-glow gold"></div>
+        <div class="hero-content">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <h1>Collection Analyzer</h1>
+            <p class="subtitle">Track your Magic: The Gathering collection, discover missing cards, and monitor your investment</p>
+            <div class="mana-bar">
+                <div class="mana-symbol white"></div>
+                <div class="mana-symbol blue"></div>
+                <div class="mana-symbol black"></div>
+                <div class="mana-symbol red"></div>
+                <div class="mana-symbol green"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- How to Use Section -->
+        <div class="how-to-use" style="margin-top: -60px; margin-bottom: 2rem;">
+            <h2><span class="icon">📖</span> How to Use</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Your Collection</h3>
+                    <p>Sign up at <a href="https://archidekt.com/" target="_blank">Archidekt</a> and add your MTG cards to your collection. You can search and add cards manually or import from other sources.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Export as CSV</h3>
+                    <p>Go to your Collection page on Archidekt, click the export/download button, and select <strong>CSV format</strong>. Save the file to your computer.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Upload & Analyze</h3>
+                    <p>Drag your CSV file into the upload area below (or click to browse). We'll compare your collection against Scryfall's database to find missing cards.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Export Missing Cards</h3>
+                    <p>Copy or download your missing card lists in <strong>Card Kingdom</strong> or <strong>Star City Games</strong> format to easily purchase what you need.</p>
+                </div>
+            </div>
+
+            <a href="https://archidekt.com/" target="_blank" class="archidekt-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                Go to Archidekt
+            </a>
+
+            <div class="csv-format">
+                <h4>Required CSV Columns</h4>
+                <code>Edition Name, Scryfall ID</code>
+                <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Archidekt exports include these columns by default</p>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section" style="margin-top: 0;">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📜</div>
+                <p>Drag & drop your collection CSV here</p>
+                <p style="margin: 0.75rem 0 1.25rem;">or</p>
+                <button class="btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+                <input type="file" id="fileInput" accept=".csv">
+            </div>
+            <p id="fileName"></p>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Summoning card data from Scryfall...</p>
+            <p style="margin-top: 0.5rem;">This may take a moment</p>
+        </div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+            <div class="toggle-container">
+                <button class="toggle-btn active" id="toggleCK" onclick="setFormat('card_kingdom')">Card Kingdom</button>
+                <button class="toggle-btn" id="toggleSCG" onclick="setFormat('starcity')">Star City Games</button>
+            </div>
+
+            <div class="summary" id="summary"></div>
+
+            <div class="section-header">
+                <h2>Your Sets</h2>
+            </div>
+
+            <div id="setResults"></div>
+
+            <div class="expensive-section" id="expensiveSection"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Powered by <a href="https://scryfall.com" target="_blank">Scryfall</a> • Card data © Wizards of the Coast</p>
+        </div>
+    </div>
+
+    <script>
+        let currentFormat = 'card_kingdom';
+        let resultsData = [];
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'));
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'));
+        });
+
+        uploadArea.addEventListener('drop', e => {
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        });
+
+        function handleFile(file) {
+            fileName.textContent = `Selected: ${file.name}`;
+            uploadFile(file);
+        }
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            loading.style.display = 'block';
+            results.style.display = 'none';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    resultsData = data.results;
+                    renderResults();
+                }
+            } catch (err) {
+                alert('Error uploading file: ' + err.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function setFormat(format) {
+            currentFormat = format;
+            document.getElementById('toggleCK').classList.toggle('active', format === 'card_kingdom');
+            document.getElementById('toggleSCG').classList.toggle('active', format === 'starcity');
+            renderResults();
+        }
+
+        function renderResults() {
+            results.style.display = 'block';
+
+            const totalSets = resultsData.length;
+            const totalMissing = resultsData.reduce((sum, r) => sum + r.missing_count, 0);
+            const totalInCollection = resultsData.reduce((sum, r) => sum + r.in_collection, 0);
+            const totalCollectionValue = resultsData.reduce((sum, r) => sum + (r.collection_value || 0), 0);
+            const totalMissingValue = resultsData.reduce((sum, r) => sum + (r.missing_value || 0), 0);
+
+            document.getElementById('summary').innerHTML = `
+                <div class="summary-item">
+                    <h3>${totalSets}</h3>
+                    <p>Sets</p>
+                </div>
+                <div class="summary-item">
+                    <h3>${totalInCollection}</h3>
+                    <p>In Collection</p>
+                </div>
+                <div class="summary-item">
+                    <h3 class="price">$${totalCollectionValue.toFixed(2)}</h3>
+                    <p>Collection Value</p>
+                </div>
+                <div class="summary-item">
+                    <h3>${totalMissing}</h3>
+                    <p>Missing</p>
+                </div>
+                <div class="summary-item">
+                    <h3 class="price-missing">$${totalMissingValue.toFixed(2)}</h3>
+                    <p>To Complete</p>
+                </div>
+            `;
+
+            const container = document.getElementById('setResults');
+            container.innerHTML = resultsData.map((set, i) => {
+                const cardText = currentFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
+                const hasError = set.error;
+                const collectionValue = (set.collection_value || 0).toFixed(2);
+                const missingValue = (set.missing_value || 0).toFixed(2);
+
+                return `
+                    <div class="set-card">
+                        <div class="set-header" onclick="toggleSet(${i})">
+                            <span class="set-title">${set.set_name}</span>
+                            <div class="set-stats">
+                                <span class="stat">Set: <span class="stat-value">${set.total_in_set}</span></span>
+                                <span class="stat">Have: <span class="stat-value">${set.in_collection}</span></span>
+                                <span class="stat">Missing: <span class="stat-value">${set.missing_count}</span></span>
+                                <span class="stat">Value: <span class="stat-value" style="color: #10b981;">$${collectionValue}</span></span>
+                            </div>
+                        </div>
+                        <div class="set-body" id="setBody${i}">
+                            ${hasError ? `<div class="error-msg">Error: ${set.error}</div>` : ''}
+                            <div class="price-info">
+                                <div class="price-box">
+                                    <span class="price-label">Collection Value</span>
+                                    <span class="price-value collection">$${collectionValue}</span>
+                                </div>
+                                <div class="price-box">
+                                    <span class="price-label">Missing Cards Value</span>
+                                    <span class="price-value missing">$${missingValue}</span>
+                                </div>
+                            </div>
+                            <div class="card-list">${cardText || 'No missing cards!'}</div>
+                            <div class="export-buttons">
+                                <button class="btn btn-secondary" onclick="copyToClipboard(${i})">Copy to Clipboard</button>
+                                <button class="btn btn-secondary" onclick="downloadText(${i})">Download .txt</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            renderExpensiveCards();
+        }
+
+        function renderExpensiveCards() {
+            const expensiveSection = document.getElementById('expensiveSection');
+            
+            const setsWithExpensive = resultsData.filter(set => 
+                set.expensive_cards && set.expensive_cards.length > 0
+            );
+
+            if (setsWithExpensive.length === 0) {
+                expensiveSection.innerHTML = `
+                    <div class="section-header">
+                        <h2>💎 High Value Missing Cards ($50+)</h2>
+                    </div>
+                    <div class="no-expensive">No missing cards over $50 — nice collection!</div>
+                `;
+                return;
+            }
+
+            const totalExpensiveValue = setsWithExpensive.reduce((sum, set) => 
+                sum + set.expensive_cards.reduce((s, c) => s + c.price, 0), 0
+            );
+            const totalExpensiveCount = setsWithExpensive.reduce((sum, set) => 
+                sum + set.expensive_cards.length, 0
+            );
+
+            expensiveSection.innerHTML = `
+                <div class="section-title">
+                    <span class="icon">💎</span>
+                    High Value Missing Cards ($50+)
+                    <span style="font-size: 0.9rem; color: #fbbf24; margin-left: auto; font-family: Inter, sans-serif;">
+                        ${totalExpensiveCount} cards • $${totalExpensiveValue.toFixed(2)}
+                    </span>
+                </div>
+                ${setsWithExpensive.map((set, idx) => {
+                    const setIdx = resultsData.indexOf(set);
+                    return `
+                        <div class="expensive-card">
+                            <div class="expensive-header" onclick="toggleExpensive(${setIdx})">
+                                <span class="expensive-set-name">${set.set_name}</span>
+                                <span class="expensive-count">${set.expensive_cards.length} cards</span>
+                            </div>
+                            <div class="expensive-body" id="expensiveBody${setIdx}">
+                                <table class="expensive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Card Name</th>
+                                            <th>Collector #</th>
+                                            <th>Rarity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${set.expensive_cards.map(card => `
+                                            <tr>
+                                                <td class="card-name">${card.name}</td>
+                                                <td>${card.collector_number}</td>
+                                                <td class="card-rarity">${card.rarity}</td>
+                                                <td class="card-price">$${card.price.toFixed(2)}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function toggleExpensive(index) {
+            const body = document.getElementById(`expensiveBody${index}`);
+            body.classList.toggle('open');
+        }
+
+        function toggleSet(index) {
+            const body = document.getElementById(`setBody${index}`);
+            body.classList.toggle('open');
+        }
+
+        function copyToClipboard(index) {
+            const text = currentFormat === 'card_kingdom' 
+                ? resultsData[index].card_kingdom 
+                : resultsData[index].starcity;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        function downloadText(index) {
+            const set = resultsData[index];
+            const text = currentFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
+            const filename = `${set.set_name.replace(/[^a-z0-9]/gi, '_')}_missing_${currentFormat}.txt`;
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
