@@ -7,6 +7,8 @@ Compare your Magic: The Gathering collection against full set data from the [Scr
 - View collection value and cost to complete each set
 - Export in Card Kingdom or Star City Games format
 - Identify high-value missing cards ($50+)
+- Set Card Lookup: fetch all cards from any set by code for easy export
+- Supports all card variants including basic land art variations
 - Beautiful MTG-inspired web interface
 
 ## Web Application

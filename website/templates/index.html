@@ -889,6 +889,124 @@
             color: var(--gold);
         }
 
+        /* Set Lookup Section */
+        .set-lookup-section {
+            margin-top: 3rem;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .set-lookup-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .lookup-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .set-input {
+            flex: 1;
+            max-width: 300px;
+            padding: 0.875rem 1rem;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .set-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+        }
+
+        .set-input::placeholder {
+            text-transform: none;
+            color: #555;
+        }
+
+        .lookup-loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .lookup-loading p {
+            color: #888;
+            margin-top: 1rem;
+        }
+
+        .lookup-results {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .lookup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(90deg, rgba(201, 162, 39, 0.1) 0%, transparent 100%);
+            border-left: 3px solid var(--gold);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .lookup-header h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .lookup-header .card-count {
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+        .lookup-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lookup-cards {
+            padding: 1.25rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .lookup-error {
+            background: linear-gradient(135deg, rgba(127, 29, 29, 0.5), rgba(127, 29, 29, 0.3));
+            border: 1px solid #991b1b;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -1078,6 +1196,38 @@
             <div id="setResults"></div>
 
             <div class="expensive-section" id="expensiveSection"></div>
+        </div>
+
+        <!-- Set Lookup Section -->
+        <div class="set-lookup-section">
+            <h2><span class="icon">🔍</span> Set Card Lookup</h2>
+            <p class="section-desc">Enter a set code to get all cards in that set</p>
+            
+            <div class="lookup-form">
+                <input type="text" id="setCodeInput" placeholder="e.g. vis, mir, drk" class="set-input">
+                <button class="btn" onclick="lookupSet()">Fetch Cards</button>
+            </div>
+
+            <div class="lookup-loading" id="lookupLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Fetching set data...</p>
+            </div>
+
+            <div class="lookup-results" id="lookupResults" style="display: none;">
+                <div class="lookup-header">
+                    <div>
+                        <h3 id="lookupSetName"></h3>
+                        <span id="lookupCardCount" class="card-count"></span>
+                    </div>
+                    <div class="lookup-actions">
+                        <button class="btn btn-secondary" onclick="copySetCards()">Copy to Clipboard</button>
+                        <button class="btn btn-secondary" onclick="downloadSetCards()">Download .txt</button>
+                    </div>
+                </div>
+                <div class="lookup-cards" id="lookupCards"></div>
+            </div>
+
+            <div class="lookup-error" id="lookupError" style="display: none;"></div>
         </div>
 
         <!-- Footer -->
@@ -1338,6 +1488,78 @@
             a.click();
             URL.revokeObjectURL(url);
         }
+
+        // Set Lookup functionality
+        let setLookupData = null;
+
+        async function lookupSet() {
+            const setCode = document.getElementById('setCodeInput').value.trim();
+            if (!setCode) {
+                showLookupError('Please enter a set code');
+                return;
+            }
+
+            document.getElementById('lookupLoading').style.display = 'block';
+            document.getElementById('lookupResults').style.display = 'none';
+            document.getElementById('lookupError').style.display = 'none';
+
+            try {
+                const response = await fetch(`/set/${encodeURIComponent(setCode)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    showLookupError(data.error);
+                    return;
+                }
+
+                setLookupData = data;
+                document.getElementById('lookupSetName').textContent = data.set_name;
+                document.getElementById('lookupCardCount').textContent = `${data.card_count} cards`;
+                document.getElementById('lookupCards').textContent = data.cards;
+                
+                document.getElementById('lookupLoading').style.display = 'none';
+                document.getElementById('lookupResults').style.display = 'block';
+            } catch (err) {
+                showLookupError('Failed to fetch set data: ' + err.message);
+            }
+        }
+
+        function showLookupError(message) {
+            document.getElementById('lookupLoading').style.display = 'none';
+            document.getElementById('lookupResults').style.display = 'none';
+            document.getElementById('lookupError').style.display = 'block';
+            document.getElementById('lookupError').textContent = message;
+        }
+
+        function copySetCards() {
+            if (!setLookupData) return;
+            navigator.clipboard.writeText(setLookupData.cards).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
+        }
+
+        function downloadSetCards() {
+            if (!setLookupData) return;
+            const filename = `${setLookupData.set_name.replace(/[^a-z0-9]/gi, '_')}_cards.txt`;
+            
+            const blob = new Blob([setLookupData.cards], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Allow enter key to trigger lookup
+        document.getElementById('setCodeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                lookupSet();
+            }
+        });
     </script>
 </body>
 </html>

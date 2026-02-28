@@ -63,8 +63,11 @@ class ScryfallClient:
     def get_set(self, set_code: str) -> dict:
         return self.get(f"/sets/{set_code}")
 
-    def search_cards(self, query: str, page: int = 1) -> dict:
-        return self.get("/cards/search", params={"q": query, "page": page})
+    def search_cards(self, query: str, page: int = 1, unique: str | None = None) -> dict:
+        params = {"q": query, "page": page}
+        if unique:
+            params["unique"] = unique
+        return self.get("/cards/search", params=params)
 
 
 def _pull_set_cards(set_name: str) -> pd.DataFrame:
@@ -88,7 +91,7 @@ def _pull_set_cards(set_name: str) -> pd.DataFrame:
     set_code = set_code.lower()
     client = ScryfallClient()
     all_cards = []
-    data = client.search_cards(f"set:{set_code}", page=1)
+    data = client.search_cards(f"set:{set_code}", page=1, unique="prints")
 
     while True:
         all_cards.extend(data.get("data", []))
@@ -234,6 +237,38 @@ def upload():
         return jsonify({"results": results})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/set/<set_code>", methods=["GET"])
+def get_set_cards(set_code):
+    """Fetch all cards from a set by set code."""
+    try:
+        client = ScryfallClient()
+        set_code = set_code.lower().strip()
+        
+        set_info = client.get_set(set_code)
+        set_name = set_info.get("name", set_code.upper())
+        
+        all_cards = []
+        data = client.search_cards(f"set:{set_code}", page=1)
+        
+        while True:
+            all_cards.extend(data.get("data", []))
+            next_page = data.get("next_page")
+            if not next_page:
+                break
+            data = client.get_url(next_page)
+        
+        card_lines = [f"{card['name']} ({set_code})" for card in all_cards]
+        
+        return jsonify({
+            "set_name": set_name,
+            "set_code": set_code,
+            "card_count": len(all_cards),
+            "cards": "\n".join(card_lines),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
 if __name__ == "__main__":
