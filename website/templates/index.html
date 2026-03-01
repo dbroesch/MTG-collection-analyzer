@@ -763,132 +763,6 @@
             border-radius: 12px;
         }
 
-        /* How to Use Section */
-        .how-to-use {
-            margin-top: 2rem;
-            background: linear-gradient(145deg, #1a1a1a, #141414);
-            border: 1px solid #2a2a2a;
-            border-radius: 16px;
-            padding: 2rem;
-        }
-
-        .how-to-use h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .how-to-use h2 .icon {
-            font-size: 1.5rem;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .step {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .step:hover {
-            border-color: var(--gold);
-            transform: translateY(-2px);
-        }
-
-        .step-number {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--gold) 0%, #a88520 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            color: #000;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .step h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-
-        .step p {
-            font-size: 0.9rem;
-            color: #888;
-            line-height: 1.6;
-        }
-
-        .step a {
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .step a:hover {
-            text-decoration: underline;
-        }
-
-        .archidekt-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-            padding: 0.75rem 1.25rem;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #fff;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .archidekt-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        }
-
-        .archidekt-link svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .csv-format {
-            margin-top: 1.5rem;
-            padding: 1rem 1.25rem;
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 8px;
-        }
-
-        .csv-format h4 {
-            font-size: 0.85rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
-
-        .csv-format code {
-            font-family: 'JetBrains Mono', 'Consolas', monospace;
-            font-size: 0.8rem;
-            color: var(--gold);
-        }
-
         /* Set Lookup Section */
         .set-lookup-section {
             margin-top: 3rem;
@@ -1007,6 +881,806 @@
             border-radius: 8px;
         }
 
+        /* Collection Management Section */
+        .collection-section {
+            margin-top: 3rem;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .collection-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .collection-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            background: rgba(201, 162, 39, 0.1);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .collection-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .card-search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-search-input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .card-search-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .set-filter-input {
+            width: 140px;
+            padding: 0.875rem 1rem;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .set-filter-input:focus {
+            outline: none;
+            border-color: var(--mana-blue);
+        }
+
+        .set-filter-input::placeholder {
+            text-transform: none;
+        }
+
+        .search-hint {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .search-card-item {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-card-item:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .search-card-item.owned {
+            border-color: var(--mana-green);
+            background: rgba(34, 197, 94, 0.08);
+            position: relative;
+        }
+
+        .search-card-item.owned:hover {
+            border-color: var(--mana-green);
+        }
+
+        .owned-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--mana-green);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .search-card-item img {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-card-item .card-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .search-card-item .card-set {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .search-card-item .card-price {
+            font-size: 0.85rem;
+            color: var(--mana-green);
+            margin-top: 0.25rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-selector button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .quantity-selector button:hover {
+            background: #2a2a2a;
+        }
+
+        .quantity-selector input {
+            width: 50px;
+            text-align: center;
+            padding: 0.25rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .collection-card-item {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collection-card-item .card-image-wrapper {
+            position: relative;
+        }
+
+        .collection-card-item img {
+            width: 100%;
+            display: block;
+        }
+
+        .collection-card-item .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        }
+
+        .collection-card-item .card-qty {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .collection-card-item .card-price-tag {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--mana-green);
+            font-weight: 600;
+            padding: 0.4rem 0.5rem;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .collection-card-item .card-actions {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .collection-card-item .card-actions button {
+            flex: 1;
+            padding: 0.25rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .collection-card-item .card-actions button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .collection-card-item .card-actions .delete-btn:hover {
+            background: rgba(220, 38, 38, 0.5);
+        }
+
+        .collection-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .collection-filter select {
+            padding: 0.5rem 1rem;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #fff;
+        }
+
+        .collection-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(50, 50, 60, 0.5);
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-btn:hover {
+            background: rgba(70, 70, 80, 0.5);
+        }
+
+        .view-btn.active {
+            background: linear-gradient(135deg, var(--mana-purple), var(--mana-blue));
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 30, 40, 0.5);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-controls.pagination-bottom {
+            margin-top: 1rem;
+            margin-bottom: 0;
+            justify-content: center;
+        }
+
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .page-size-selector select {
+            padding: 0.4rem 0.75rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .page-info {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .page-nav {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .page-btn {
+            padding: 0.4rem 0.75rem;
+            background: rgba(50, 50, 60, 0.5);
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: rgba(70, 70, 80, 0.5);
+            color: #fff;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-btn.active {
+            background: var(--mana-purple);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .collection-table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .collection-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(20, 20, 25, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .collection-table th {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 1rem;
+            text-align: left;
+            color: #a78bfa;
+            font-weight: 600;
+            border-bottom: 1px solid #333;
+        }
+
+        .collection-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collection-table th.sortable:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .collection-table th .sort-icon {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .collection-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #222;
+            color: #e2e8f0;
+        }
+
+        .collection-table tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .collection-table .rarity-common { color: #9ca3af; }
+        .collection-table .rarity-uncommon { color: #c0c0c0; }
+        .collection-table .rarity-rare { color: #fbbf24; }
+        .collection-table .rarity-mythic { color: #f97316; }
+
+        .collection-table .price-cell {
+            color: var(--mana-green);
+            font-weight: 600;
+        }
+
+        .collection-table .qty-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .collection-table .qty-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .collection-table .qty-btn:hover {
+            background: #333;
+            border-color: var(--gold);
+        }
+
+        .collection-table .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .collection-table .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Analyze Section */
+        .analyze-section {
+            margin-top: 3rem;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .analyze-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .analyze-section h2 .icon {
+            font-size: 1.3rem;
+        }
+
+        /* Card Showcase Section */
+        .showcase-section {
+            margin-top: 3rem;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .showcase-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .showcase-section h2 .icon {
+            font-size: 1.3rem;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .showcase-card {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .showcase-card:hover {
+            border-color: rgba(251, 191, 36, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.15);
+        }
+
+        .showcase-card img {
+            width: 100px;
+            height: auto;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .showcase-card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .showcase-card-name {
+            font-weight: 600;
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .showcase-card-name a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .showcase-card-name a:hover {
+            text-decoration: underline;
+        }
+
+        .showcase-card-set {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .showcase-card-price {
+            color: #4ade80;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .showcase-card-meta {
+            color: #666;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .showcase-summary {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(251, 191, 36, 0.1);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .showcase-stat {
+            text-align: center;
+        }
+
+        .showcase-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .showcase-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .empty-collection {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .import-drop-zone {
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .import-drop-zone:hover,
+        .import-drop-zone.dragover {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+
+        .import-progress {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .import-progress .progress-bar {
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .import-progress .progress-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        /* Analyze Tab */
+        .analyze-progress {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .analyze-progress .progress-bar {
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .analyze-progress .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--mana-purple), var(--mana-blue));
+            transition: width 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--mana-purple), var(--mana-blue));
+            color: #fff;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-small {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .analyze-format-btn {
+            background: rgba(50, 50, 60, 0.5);
+            color: #888;
+            border: 1px solid #333;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .analyze-format-btn:hover {
+            background: rgba(70, 70, 80, 0.5);
+        }
+
+        .analyze-format-btn.active {
+            background: linear-gradient(135deg, var(--mana-purple), var(--mana-blue));
+            color: #fff;
+            border-color: transparent;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -1115,119 +1789,159 @@
     </div>
 
     <div class="container">
-        <!-- How to Use Section -->
-        <div class="how-to-use" style="margin-top: -60px; margin-bottom: 2rem;">
-            <h2><span class="icon">📖</span> How to Use</h2>
-            
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Create Your Collection</h3>
-                    <p>Sign up at <a href="https://archidekt.com/" target="_blank">Archidekt</a> and add your MTG cards to your collection. You can search and add cards manually or import from other sources.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Export as CSV</h3>
-                    <p>Go to your Collection page on Archidekt, click the export/download button, and select <strong>CSV format</strong>. Save the file to your computer.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Upload & Analyze</h3>
-                    <p>Drag your CSV file into the upload area below (or click to browse). We'll compare your collection against Scryfall's database to find missing cards.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Export Missing Cards</h3>
-                    <p>Copy or download your missing card lists in <strong>Card Kingdom</strong> or <strong>Star City Games</strong> format to easily purchase what you need.</p>
+        <!-- Analyze Missing Section -->
+        <div class="analyze-section">
+            <h2><span class="icon">🔍</span> Missing Cards Analysis</h2>
+            <p class="section-desc">Automatically updated when your collection changes</p>
+
+            <div class="analyze-progress" id="analyzeProgress" style="display: none;">
+                <div id="analyzeStatus">Analyzing collection...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="analyzeProgressFill" style="width: 0%"></div>
                 </div>
             </div>
 
-            <a href="https://archidekt.com/" target="_blank" class="archidekt-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                Go to Archidekt
-            </a>
-
-            <div class="csv-format">
-                <h4>Required CSV Columns</h4>
-                <code>Edition Name, Scryfall ID</code>
-                <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Archidekt exports include these columns by default</p>
+            <div id="analyzeResults">
+                <p style="text-align: center; color: #666; padding: 2rem;">Loading analysis...</p>
             </div>
         </div>
 
-        <!-- Upload Section -->
-        <div class="upload-section" style="margin-top: 0;">
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">📜</div>
-                <p>Drag & drop your collection CSV here</p>
-                <p style="margin: 0.75rem 0 1.25rem;">or</p>
-                <button class="btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
-                <input type="file" id="fileInput" accept=".csv">
-            </div>
-            <p id="fileName"></p>
-        </div>
+        <!-- Collection Management Section -->
+        <div class="collection-section">
+            <h2><span class="icon">📚</span> My Collection</h2>
+            <p class="section-desc">Manage your card collection with bulk import or manual entry</p>
 
-        <!-- Loading -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Summoning card data from Scryfall...</p>
-            <p style="margin-top: 0.5rem;">This may take a moment</p>
-        </div>
-
-        <!-- Results -->
-        <div class="results" id="results">
-            <div class="toggle-container">
-                <button class="toggle-btn active" id="toggleCK" onclick="setFormat('card_kingdom')">Card Kingdom</button>
-                <button class="toggle-btn" id="toggleSCG" onclick="setFormat('starcity')">Star City Games</button>
+            <div class="collection-tabs">
+                <button class="tab-btn active" onclick="switchCollectionTab('view')">View Collection</button>
+                <button class="tab-btn" onclick="switchCollectionTab('add')">Add Cards</button>
+                <button class="tab-btn" onclick="switchCollectionTab('import')">Bulk Import</button>
             </div>
 
-            <div class="summary" id="summary"></div>
-
-            <div class="section-header">
-                <h2>Your Sets</h2>
-            </div>
-
-            <div id="setResults"></div>
-
-            <div class="expensive-section" id="expensiveSection"></div>
-        </div>
-
-        <!-- Set Lookup Section -->
-        <div class="set-lookup-section">
-            <h2><span class="icon">🔍</span> Set Card Lookup</h2>
-            <p class="section-desc">Enter a set code to get all cards in that set</p>
-            
-            <div class="lookup-form">
-                <input type="text" id="setCodeInput" placeholder="e.g. vis, mir, drk" class="set-input">
-                <button class="btn" onclick="lookupSet()">Fetch Cards</button>
-            </div>
-
-            <div class="lookup-loading" id="lookupLoading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Fetching set data...</p>
-            </div>
-
-            <div class="lookup-results" id="lookupResults" style="display: none;">
-                <div class="lookup-header">
-                    <div>
-                        <h3 id="lookupSetName"></h3>
-                        <span id="lookupCardCount" class="card-count"></span>
+            <!-- View Collection Tab -->
+            <div class="tab-content active" id="viewCollectionTab">
+                <div class="collection-stats" id="collectionStats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalCards">0</div>
+                        <div class="stat-label">Unique Cards</div>
                     </div>
-                    <div class="lookup-actions">
-                        <button class="btn btn-secondary" onclick="copySetCards()">Copy to Clipboard</button>
-                        <button class="btn btn-secondary" onclick="downloadSetCards()">Download .txt</button>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalQuantity">0</div>
+                        <div class="stat-label">Total Quantity</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalSets">0</div>
+                        <div class="stat-label">Sets</div>
                     </div>
                 </div>
-                <div class="lookup-cards" id="lookupCards"></div>
+
+                <div class="collection-controls">
+                    <div class="collection-filter">
+                        <select id="setFilter" onchange="loadCollection()">
+                            <option value="">All Sets</option>
+                        </select>
+                        <input type="text" class="card-search-input" id="collectionSearch" 
+                               placeholder="Search by name..." onkeyup="debounceSearch()" style="max-width: 300px;">
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="gridViewBtn" onclick="setCollectionView('grid')">
+                            <span>▦</span> Grid
+                        </button>
+                        <button class="view-btn" id="tableViewBtn" onclick="setCollectionView('table')">
+                            <span>☰</span> Table
+                        </button>
+                        <button class="view-btn reset-sort-btn" onclick="resetSorting()">
+                            <span>↻</span> Reset Sort
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pagination-controls" id="paginationControls">
+                    <div class="page-size-selector">
+                        <label>Show:</label>
+                        <select id="pageSizeSelect" onchange="changePageSize(this.value)">
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="page-info" id="pageInfo"></div>
+                    <div class="page-nav" id="pageNav"></div>
+                </div>
+
+                <div class="collection-grid" id="collectionGrid">
+                    <div class="empty-collection">
+                        <p>No cards in collection yet.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Use "Add Cards" or "Bulk Import" to get started.</p>
+                    </div>
+                </div>
+
+                <div class="pagination-controls pagination-bottom" id="paginationBottom">
+                    <div class="page-nav" id="pageNavBottom"></div>
+                </div>
+
+                <div class="collection-table-container" id="collectionTableContainer" style="display: none;">
+                    <table class="collection-table" id="collectionTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortCollection('name')">Name <span class="sort-icon" id="sort-name"></span></th>
+                                <th class="sortable" onclick="sortCollection('set_name')">Set <span class="sort-icon" id="sort-set_name"></span></th>
+                                <th class="sortable" onclick="sortCollection('rarity')">Rarity <span class="sort-icon" id="sort-rarity"></span></th>
+                                <th class="sortable" onclick="sortCollection('price')">Price <span class="sort-icon" id="sort-price"></span></th>
+                                <th>Qty</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collectionTableBody"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="lookup-error" id="lookupError" style="display: none;"></div>
+            <!-- Add Cards Tab -->
+            <div class="tab-content" id="addCardsTab">
+                <div class="card-search-box">
+                    <div class="search-filters">
+                        <input type="text" class="card-search-input" id="cardSearchInput" 
+                               placeholder="Search for a card by name..." onkeyup="debounceCardSearch()">
+                        <input type="text" class="set-filter-input" id="addCardSetFilter" 
+                               placeholder="Set code (e.g. ICE, MIR)" onkeyup="debounceCardSearch()">
+                        <button class="btn" onclick="searchCards()">Search</button>
+                    </div>
+                    <p class="search-hint">Leave set code empty to search all sets</p>
+                </div>
+
+                <div class="search-results-grid" id="searchResults"></div>
+            </div>
+
+            <!-- Bulk Import Tab -->
+            <div class="tab-content" id="importTab">
+                <div class="import-drop-zone" id="importDropZone" onclick="document.getElementById('importFileInput').click()">
+                    <input type="file" id="importFileInput" accept=".csv" style="display: none;" onchange="handleImportFile(this.files[0])">
+                    <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📁 Drop your CSV file here</p>
+                    <p style="color: #666;">or click to browse</p>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 1rem;">CSV must contain "Scryfall ID" column</p>
+                </div>
+
+                <div class="import-progress" id="importProgress" style="display: none;">
+                    <div id="importStatus">Importing cards...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="importProgressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="importResult" style="margin-top: 1rem;"></div>
+            </div>
+
+        </div>
+
+        <!-- Card Showcase Section -->
+        <div class="showcase-section">
+            <h2><span class="icon">💎</span> Card Showcase</h2>
+            <p class="section-desc">High-value cards in your collection ($50+)</p>
+
+            <div id="showcaseResults">
+                <p style="text-align: center; color: #666; padding: 2rem;">Loading showcase...</p>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -1243,322 +1957,882 @@
     </div>
 
     <script>
-        let currentFormat = 'card_kingdom';
-        let resultsData = [];
+        // ========== Collection Management ==========
+        let collectionData = [];
+        let collectionSets = [];
+        let searchTimeout = null;
+        let cardSearchTimeout = null;
+        let currentView = 'grid';
+        let sortField = 'default';
+        let sortDirection = 'asc';
+        let currentPage = 1;
+        let pageSize = 100;
 
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const fileName = document.getElementById('fileName');
-        const loading = document.getElementById('loading');
-        const results = document.getElementById('results');
+        function switchCollectionTab(tabName) {
+            document.querySelectorAll('.collection-section .tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.collection-section .tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            
+            if (tabName === 'view') {
+                document.getElementById('viewCollectionTab').classList.add('active');
+                loadCollection();
+            } else if (tabName === 'add') {
+                document.getElementById('addCardsTab').classList.add('active');
+            } else if (tabName === 'import') {
+                document.getElementById('importTab').classList.add('active');
+            }
+        }
 
+        async function loadCollection() {
+            const setFilter = document.getElementById('setFilter').value;
+            const search = document.getElementById('collectionSearch').value;
+            
+            try {
+                let url = '/api/collection?';
+                if (setFilter) url += `set=${encodeURIComponent(setFilter)}&`;
+                if (search) url += `search=${encodeURIComponent(search)}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error('Error loading collection:', data.error);
+                    return;
+                }
+                
+                collectionData = data.cards || [];
+                renderCollection();
+                loadCollectionSets();
+            } catch (err) {
+                console.error('Failed to load collection:', err);
+            }
+        }
+
+        async function loadCollectionSets() {
+            try {
+                const response = await fetch('/api/collection/sets');
+                const data = await response.json();
+                
+                if (data.sets) {
+                    collectionSets = data.sets;
+                    updateSetFilter();
+                    updateCollectionStats();
+                }
+            } catch (err) {
+                console.error('Failed to load sets:', err);
+            }
+        }
+
+        function updateSetFilter() {
+            const select = document.getElementById('setFilter');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">All Sets</option>';
+            collectionSets.forEach(set => {
+                const option = document.createElement('option');
+                option.value = set.set_code;
+                option.textContent = `${set.set_name} (${set.card_count})`;
+                select.appendChild(option);
+            });
+            
+            select.value = currentValue;
+        }
+
+        function updateCollectionStats() {
+            const totalCards = collectionSets.reduce((sum, s) => sum + s.card_count, 0);
+            const totalQuantity = collectionSets.reduce((sum, s) => sum + s.total_quantity, 0);
+            
+            document.getElementById('totalCards').textContent = totalCards;
+            document.getElementById('totalQuantity').textContent = totalQuantity;
+            document.getElementById('totalSets').textContent = collectionSets.length;
+        }
+
+        function setCollectionView(view) {
+            currentView = view;
+            currentPage = 1;
+            document.getElementById('gridViewBtn').classList.toggle('active', view === 'grid');
+            document.getElementById('tableViewBtn').classList.toggle('active', view === 'table');
+            document.getElementById('collectionGrid').style.display = view === 'grid' ? 'grid' : 'none';
+            document.getElementById('collectionTableContainer').style.display = view === 'table' ? 'block' : 'none';
+            document.getElementById('paginationControls').style.display = view === 'grid' ? 'flex' : 'none';
+            document.getElementById('paginationBottom').style.display = view === 'grid' ? 'flex' : 'none';
+            renderCollection();
+        }
+
+        function sortCollection(field) {
+            if (sortField === field) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortField = field;
+                sortDirection = 'asc';
+            }
+            
+            document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '');
+            const icon = document.getElementById(`sort-${field}`);
+            if (icon) {
+                icon.textContent = sortDirection === 'asc' ? '▲' : '▼';
+            }
+            
+            renderCollection();
+        }
+
+        function resetSorting() {
+            sortField = 'default';
+            sortDirection = 'asc';
+            document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '');
+            renderCollection();
+        }
+
+        function changePageSize(size) {
+            if (size === 'all') {
+                pageSize = Infinity;
+            } else {
+                pageSize = parseInt(size);
+            }
+            currentPage = 1;
+            renderCollection();
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderCollection();
+            document.getElementById('collectionGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderPagination(totalItems) {
+            const paginationControls = document.getElementById('paginationControls');
+            const paginationBottom = document.getElementById('paginationBottom');
+            const pageInfo = document.getElementById('pageInfo');
+            const pageNav = document.getElementById('pageNav');
+            const pageNavBottom = document.getElementById('pageNavBottom');
+            
+            if (totalItems === 0 || currentView !== 'grid') {
+                paginationControls.style.display = 'none';
+                paginationBottom.style.display = 'none';
+                return;
+            }
+            
+            paginationControls.style.display = 'flex';
+            
+            if (pageSize === Infinity) {
+                pageInfo.textContent = `Showing all ${totalItems} cards`;
+                pageNav.innerHTML = '';
+                pageNavBottom.innerHTML = '';
+                paginationBottom.style.display = 'none';
+                return;
+            }
+            
+            const totalPages = Math.ceil(totalItems / pageSize);
+            const startItem = (currentPage - 1) * pageSize + 1;
+            const endItem = Math.min(currentPage * pageSize, totalItems);
+            
+            pageInfo.textContent = `Showing ${startItem}-${endItem} of ${totalItems} cards`;
+            
+            if (totalPages <= 1) {
+                pageNav.innerHTML = '';
+                pageNavBottom.innerHTML = '';
+                paginationBottom.style.display = 'none';
+                return;
+            }
+            
+            paginationBottom.style.display = 'flex';
+            
+            let navHtml = `
+                <button class="page-btn" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>«</button>
+                <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>
+            `;
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            
+            if (startPage > 1) {
+                navHtml += `<button class="page-btn" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) navHtml += `<span style="color: #666; padding: 0 0.25rem;">...</span>`;
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                navHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) navHtml += `<span style="color: #666; padding: 0 0.25rem;">...</span>`;
+                navHtml += `<button class="page-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            navHtml += `
+                <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>
+                <button class="page-btn" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>»</button>
+            `;
+            
+            pageNav.innerHTML = navHtml;
+            pageNavBottom.innerHTML = navHtml;
+        }
+
+        function getCardPrice(card) {
+            const prices = card.scryfall_data?.prices || {};
+            return parseFloat(prices.usd || prices.usd_foil || 0);
+        }
+
+        function getCardRarity(card) {
+            return card.scryfall_data?.rarity || 'common';
+        }
+
+        function renderCollection() {
+            const grid = document.getElementById('collectionGrid');
+            const tableBody = document.getElementById('collectionTableBody');
+            
+            if (collectionData.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-collection">
+                        <p>No cards in collection yet.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Use "Add Cards" or "Bulk Import" to get started.</p>
+                    </div>
+                `;
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #666;">No cards in collection yet.</td></tr>`;
+                return;
+            }
+            
+            const sortedData = [...collectionData].sort((a, b) => {
+                if (sortField === 'default') {
+                    const setCompare = a.set_name.toLowerCase().localeCompare(b.set_name.toLowerCase());
+                    if (setCompare !== 0) return sortDirection === 'asc' ? setCompare : -setCompare;
+                    
+                    const numA = parseInt(a.collector_number) || 0;
+                    const numB = parseInt(b.collector_number) || 0;
+                    return sortDirection === 'asc' ? numA - numB : numB - numA;
+                }
+                
+                let valA, valB;
+                
+                switch (sortField) {
+                    case 'name':
+                        valA = a.name.toLowerCase();
+                        valB = b.name.toLowerCase();
+                        break;
+                    case 'set_name':
+                        valA = a.set_name.toLowerCase();
+                        valB = b.set_name.toLowerCase();
+                        break;
+                    case 'rarity':
+                        const rarityOrder = { 'common': 0, 'uncommon': 1, 'rare': 2, 'mythic': 3 };
+                        valA = rarityOrder[getCardRarity(a)] || 0;
+                        valB = rarityOrder[getCardRarity(b)] || 0;
+                        break;
+                    case 'price':
+                        valA = getCardPrice(a);
+                        valB = getCardPrice(b);
+                        break;
+                    default:
+                        valA = a.name.toLowerCase();
+                        valB = b.name.toLowerCase();
+                }
+                
+                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            const totalPages = pageSize === Infinity ? 1 : Math.ceil(sortedData.length / pageSize);
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            
+            const startIndex = pageSize === Infinity ? 0 : (currentPage - 1) * pageSize;
+            const endIndex = pageSize === Infinity ? sortedData.length : startIndex + pageSize;
+            const paginatedData = sortedData.slice(startIndex, endIndex);
+            
+            grid.innerHTML = paginatedData.map(card => {
+                const imageUrl = card.scryfall_data?.image_uris?.small || 
+                                 card.scryfall_data?.image_uris?.normal || '';
+                const price = getCardPrice(card);
+                return `
+                    <div class="collection-card-item">
+                        <div class="card-image-wrapper">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${card.name}" loading="lazy">` : ''}
+                            <div class="card-qty">x${card.quantity}</div>
+                            <div class="card-overlay">
+                                <div class="card-actions">
+                                    <button onclick="updateCardQuantity('${card.id}', ${card.quantity - 1})">-</button>
+                                    <button onclick="updateCardQuantity('${card.id}', ${card.quantity + 1})">+</button>
+                                    <button class="delete-btn" onclick="removeCard('${card.id}')">🗑</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-price-tag">$${price.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            renderPagination(sortedData.length);
+            
+            tableBody.innerHTML = sortedData.map(card => {
+                const rarity = getCardRarity(card);
+                const price = getCardPrice(card);
+                const rarityClass = `rarity-${rarity}`;
+                
+                return `
+                    <tr>
+                        <td>${card.name}</td>
+                        <td>${card.set_name} <span style="color: #666;">(${card.set_code.toUpperCase()})</span></td>
+                        <td class="${rarityClass}">${rarity.charAt(0).toUpperCase() + rarity.slice(1)}</td>
+                        <td class="price-cell">$${price.toFixed(2)}</td>
+                        <td>
+                            <div class="qty-cell">
+                                <button class="qty-btn" onclick="updateCardQuantity('${card.id}', ${card.quantity - 1})">-</button>
+                                <span>${card.quantity}</span>
+                                <button class="qty-btn" onclick="updateCardQuantity('${card.id}', ${card.quantity + 1})">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="delete-btn" onclick="removeCard('${card.id}')">🗑 Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => loadCollection(), 300);
+        }
+
+        function debounceCardSearch() {
+            clearTimeout(cardSearchTimeout);
+            cardSearchTimeout = setTimeout(() => searchCards(), 300);
+        }
+
+        async function searchCards() {
+            const query = document.getElementById('cardSearchInput').value.trim();
+            const setFilter = document.getElementById('addCardSetFilter').value.trim().toLowerCase();
+            
+            if (query.length < 2 && !setFilter) {
+                document.getElementById('searchResults').innerHTML = '<p style="color: #666; padding: 1rem;">Enter a card name or set code to search</p>';
+                return;
+            }
+            
+            let searchQuery = query;
+            if (setFilter) {
+                searchQuery = query ? `${query} set:${setFilter}` : `set:${setFilter}`;
+            }
+            
+            if (!searchQuery || searchQuery.length < 2) {
+                document.getElementById('searchResults').innerHTML = '';
+                return;
+            }
+            
+            try {
+                const [searchResponse, collectionResponse] = await Promise.all([
+                    fetch(`/api/cards/search/full?q=${encodeURIComponent(searchQuery)}`),
+                    fetch('/api/collection')
+                ]);
+                
+                const searchData = await searchResponse.json();
+                const collectionData = await collectionResponse.json();
+                
+                if (searchData.error) {
+                    console.error('Search error:', searchData.error);
+                    document.getElementById('searchResults').innerHTML = `<p style="color: #f87171; padding: 1rem;">Search error: ${searchData.error}</p>`;
+                    return;
+                }
+                
+                const ownedCardIds = new Set((collectionData.cards || []).map(c => c.id));
+                renderSearchResults(searchData.cards || [], ownedCardIds);
+            } catch (err) {
+                console.error('Search failed:', err);
+            }
+        }
+
+        function renderSearchResults(cards, ownedCardIds = new Set()) {
+            const container = document.getElementById('searchResults');
+            
+            if (cards.length === 0) {
+                container.innerHTML = '<p style="color: #666; padding: 1rem;">No cards found</p>';
+                return;
+            }
+            
+            container.innerHTML = cards.map(card => {
+                const isOwned = ownedCardIds.has(card.id);
+                return `
+                <div class="search-card-item ${isOwned ? 'owned' : ''}" onclick="showAddCardDialog('${card.id}', this)">
+                    ${isOwned ? '<div class="owned-badge">✓ Owned</div>' : ''}
+                    ${card.image_url ? `<img src="${card.image_url}" alt="${card.name}" loading="lazy">` : ''}
+                    <div class="card-name">${card.name}</div>
+                    <div class="card-set">${card.set_name} #${card.collector_number}</div>
+                    <div class="card-price">$${parseFloat(card.price || 0).toFixed(2)}</div>
+                    <div class="quantity-selector" onclick="event.stopPropagation()">
+                        <button onclick="changeQty(this, -1)">-</button>
+                        <input type="number" value="1" min="1" max="99" class="qty-input">
+                        <button onclick="changeQty(this, 1)">+</button>
+                        <button class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" 
+                                onclick="addCardToCollection('${card.id}', this)">${isOwned ? 'Add More' : 'Add'}</button>
+                    </div>
+                </div>
+            `}).join('');
+            
+            container.querySelectorAll('.search-card-item').forEach((el, i) => {
+                el.dataset.cardData = JSON.stringify(cards[i]);
+            });
+        }
+
+        function changeQty(btn, delta) {
+            const input = btn.parentElement.querySelector('.qty-input');
+            let val = parseInt(input.value) || 1;
+            val = Math.max(1, Math.min(99, val + delta));
+            input.value = val;
+        }
+
+        async function addCardToCollection(cardId, btn) {
+            const cardItem = btn.closest('.search-card-item');
+            const cardData = JSON.parse(cardItem.dataset.cardData);
+            const quantity = parseInt(cardItem.querySelector('.qty-input').value) || 1;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '...';
+                
+                const response = await fetch('/api/collection', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: cardId,
+                        quantity: quantity,
+                        scryfall_data: cardData.scryfall_data
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    btn.textContent = '✓';
+                    btn.style.background = 'var(--mana-green)';
+                    loadCollection();
+                    analyzeCollection();
+                    loadShowcase();
+                    setTimeout(() => {
+                        btn.textContent = 'Add';
+                        btn.style.background = '';
+                        btn.disabled = false;
+                    }, 1500);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (err) {
+                btn.textContent = '!';
+                btn.style.background = 'var(--mana-red)';
+                console.error('Failed to add card:', err);
+                setTimeout(() => {
+                    btn.textContent = 'Add';
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 1500);
+            }
+        }
+
+        async function updateCardQuantity(cardId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeCard(cardId);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/collection/${cardId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quantity: newQuantity })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    loadCollection();
+                    analyzeCollection();
+                    loadShowcase();
+                }
+            } catch (err) {
+                console.error('Failed to update quantity:', err);
+            }
+        }
+
+        async function removeCard(cardId) {
+            if (!confirm('Remove this card from your collection?')) return;
+            
+            try {
+                const response = await fetch(`/api/collection/${cardId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    loadCollection();
+                    analyzeCollection();
+                    loadShowcase();
+                }
+            } catch (err) {
+                console.error('Failed to remove card:', err);
+            }
+        }
+
+        // Import functionality
+        const importDropZone = document.getElementById('importDropZone');
+        
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, e => {
+            importDropZone.addEventListener(eventName, e => {
                 e.preventDefault();
                 e.stopPropagation();
             });
         });
 
         ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'));
+            importDropZone.addEventListener(eventName, () => importDropZone.classList.add('dragover'));
         });
 
         ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'));
+            importDropZone.addEventListener(eventName, () => importDropZone.classList.remove('dragover'));
         });
 
-        uploadArea.addEventListener('drop', e => {
+        importDropZone.addEventListener('drop', e => {
             const file = e.dataTransfer.files[0];
-            if (file) handleFile(file);
+            if (file) handleImportFile(file);
         });
 
-        fileInput.addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (file) handleFile(file);
-        });
-
-        function handleFile(file) {
-            fileName.textContent = `Selected: ${file.name}`;
-            uploadFile(file);
-        }
-
-        async function uploadFile(file) {
+        async function handleImportFile(file) {
+            if (!file.name.endsWith('.csv')) {
+                alert('Please upload a CSV file');
+                return;
+            }
+            
+            const progress = document.getElementById('importProgress');
+            const progressFill = document.getElementById('importProgressFill');
+            const status = document.getElementById('importStatus');
+            const result = document.getElementById('importResult');
+            
+            progress.style.display = 'block';
+            result.innerHTML = '';
+            progressFill.style.width = '10%';
+            status.textContent = 'Uploading file...';
+            
             const formData = new FormData();
             formData.append('file', file);
-
-            loading.style.display = 'block';
-            results.style.display = 'none';
-
+            
             try {
-                const response = await fetch('/upload', {
+                progressFill.style.width = '30%';
+                status.textContent = 'Processing cards (this may take a while)...';
+                
+                const response = await fetch('/api/collection/import', {
                     method: 'POST',
                     body: formData
                 });
+                
+                progressFill.style.width = '90%';
                 const data = await response.json();
-
+                
+                progressFill.style.width = '100%';
+                
                 if (data.error) {
-                    alert('Error: ' + data.error);
+                    status.textContent = 'Import failed';
+                    result.innerHTML = `<div style="color: #f87171; padding: 1rem; background: rgba(127, 29, 29, 0.3); border-radius: 8px;">${data.error}</div>`;
                 } else {
-                    resultsData = data.results;
-                    renderResults();
+                    status.textContent = 'Import complete!';
+                    result.innerHTML = `
+                        <div style="padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px;">
+                            <p style="color: #4ade80; font-weight: 600;">Import Successful!</p>
+                            <p style="margin-top: 0.5rem;">New cards: <strong>${data.imported}</strong></p>
+                            <p>Updated cards: <strong>${data.updated}</strong></p>
+                            ${data.errors ? `<p style="color: #fca5a5; margin-top: 0.5rem;">Errors: ${data.errors.length}</p>` : ''}
+                        </div>
+                    `;
+                    loadCollection();
+                    analyzeCollection();
+                    loadShowcase();
                 }
             } catch (err) {
-                alert('Error uploading file: ' + err.message);
-            } finally {
-                loading.style.display = 'none';
+                status.textContent = 'Import failed';
+                result.innerHTML = `<div style="color: #f87171; padding: 1rem; background: rgba(127, 29, 29, 0.3); border-radius: 8px;">${err.message}</div>`;
             }
         }
 
-        function setFormat(format) {
-            currentFormat = format;
-            document.getElementById('toggleCK').classList.toggle('active', format === 'card_kingdom');
-            document.getElementById('toggleSCG').classList.toggle('active', format === 'starcity');
-            renderResults();
-        }
+        // Analyze collection for missing cards
+        let analyzeFormat = 'card_kingdom';
+        let analyzeData = [];
 
-        function renderResults() {
-            results.style.display = 'block';
-
-            const totalSets = resultsData.length;
-            const totalMissing = resultsData.reduce((sum, r) => sum + r.missing_count, 0);
-            const totalInCollection = resultsData.reduce((sum, r) => sum + r.in_collection, 0);
-            const totalCollectionValue = resultsData.reduce((sum, r) => sum + (r.collection_value || 0), 0);
-            const totalMissingValue = resultsData.reduce((sum, r) => sum + (r.missing_value || 0), 0);
-
-            document.getElementById('summary').innerHTML = `
-                <div class="summary-item">
-                    <h3>${totalSets}</h3>
-                    <p>Sets</p>
-                </div>
-                <div class="summary-item">
-                    <h3>${totalInCollection}</h3>
-                    <p>In Collection</p>
-                </div>
-                <div class="summary-item">
-                    <h3 class="price">$${totalCollectionValue.toFixed(2)}</h3>
-                    <p>Collection Value</p>
-                </div>
-                <div class="summary-item">
-                    <h3>${totalMissing}</h3>
-                    <p>Missing</p>
-                </div>
-                <div class="summary-item">
-                    <h3 class="price-missing">$${totalMissingValue.toFixed(2)}</h3>
-                    <p>To Complete</p>
-                </div>
-            `;
-
-            const container = document.getElementById('setResults');
-            container.innerHTML = resultsData.map((set, i) => {
-                const cardText = currentFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
-                const hasError = set.error;
-                const collectionValue = (set.collection_value || 0).toFixed(2);
-                const missingValue = (set.missing_value || 0).toFixed(2);
-
-                return `
-                    <div class="set-card">
-                        <div class="set-header" onclick="toggleSet(${i})">
-                            <span class="set-title">${set.set_name}</span>
-                            <div class="set-stats">
-                                <span class="stat">Set: <span class="stat-value">${set.total_in_set}</span></span>
-                                <span class="stat">Have: <span class="stat-value">${set.in_collection}</span></span>
-                                <span class="stat">Missing: <span class="stat-value">${set.missing_count}</span></span>
-                                <span class="stat">Value: <span class="stat-value" style="color: #10b981;">$${collectionValue}</span></span>
-                            </div>
-                        </div>
-                        <div class="set-body" id="setBody${i}">
-                            ${hasError ? `<div class="error-msg">Error: ${set.error}</div>` : ''}
-                            <div class="price-info">
-                                <div class="price-box">
-                                    <span class="price-label">Collection Value</span>
-                                    <span class="price-value collection">$${collectionValue}</span>
-                                </div>
-                                <div class="price-box">
-                                    <span class="price-label">Missing Cards Value</span>
-                                    <span class="price-value missing">$${missingValue}</span>
-                                </div>
-                            </div>
-                            <div class="card-list">${cardText || 'No missing cards!'}</div>
-                            <div class="export-buttons">
-                                <button class="btn btn-secondary" onclick="copyToClipboard(${i})">Copy to Clipboard</button>
-                                <button class="btn btn-secondary" onclick="downloadText(${i})">Download .txt</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            renderExpensiveCards();
-        }
-
-        function renderExpensiveCards() {
-            const expensiveSection = document.getElementById('expensiveSection');
+        let isAnalyzing = false;
+        
+        async function analyzeCollection() {
+            if (isAnalyzing) return;
+            isAnalyzing = true;
             
-            const setsWithExpensive = resultsData.filter(set => 
-                set.expensive_cards && set.expensive_cards.length > 0
-            );
+            const progress = document.getElementById('analyzeProgress');
+            const status = document.getElementById('analyzeStatus');
+            const fill = document.getElementById('analyzeProgressFill');
+            const resultsDiv = document.getElementById('analyzeResults');
 
-            if (setsWithExpensive.length === 0) {
-                expensiveSection.innerHTML = `
-                    <div class="section-header">
-                        <h2>💎 High Value Missing Cards ($50+)</h2>
-                    </div>
-                    <div class="no-expensive">No missing cards over $50 — nice collection!</div>
-                `;
+            progress.style.display = 'block';
+            fill.style.width = '10%';
+            status.textContent = 'Fetching card data from Scryfall...';
+
+            try {
+                fill.style.width = '30%';
+                const response = await fetch('/api/collection/analyze');
+                fill.style.width = '70%';
+                const data = await response.json();
+                fill.style.width = '100%';
+
+                if (data.error) {
+                    resultsDiv.innerHTML = `<div style="color: #f87171; padding: 1rem; background: rgba(127, 29, 29, 0.3); border-radius: 8px;">${data.error}</div>`;
+                } else if (data.results && data.results.length === 0) {
+                    resultsDiv.innerHTML = `<div style="color: #666; padding: 2rem; text-align: center;">No cards in collection yet. Add some cards below to see missing cards analysis!</div>`;
+                } else {
+                    analyzeData = data.results;
+                    renderAnalyzeResults();
+                }
+            } catch (err) {
+                resultsDiv.innerHTML = `<div style="color: #f87171; padding: 1rem; background: rgba(127, 29, 29, 0.3); border-radius: 8px;">${err.message}</div>`;
+            } finally {
+                isAnalyzing = false;
+                setTimeout(() => { progress.style.display = 'none'; }, 500);
+            }
+        }
+
+        function toggleAnalyzeFormat() {
+            analyzeFormat = analyzeFormat === 'card_kingdom' ? 'starcity' : 'card_kingdom';
+            document.querySelectorAll('.analyze-format-btn').forEach(btn => btn.classList.toggle('active'));
+            renderAnalyzeResults();
+        }
+
+        function renderAnalyzeResults() {
+            const resultsDiv = document.getElementById('analyzeResults');
+            if (!analyzeData || analyzeData.length === 0) {
+                resultsDiv.innerHTML = '<p style="text-align: center; color: #666;">No data to display</p>';
                 return;
             }
 
-            const totalExpensiveValue = setsWithExpensive.reduce((sum, set) => 
-                sum + set.expensive_cards.reduce((s, c) => s + c.price, 0), 0
-            );
-            const totalExpensiveCount = setsWithExpensive.reduce((sum, set) => 
-                sum + set.expensive_cards.length, 0
-            );
+            let totalInCollection = 0;
+            let totalMissing = 0;
+            let totalCollectionValue = 0;
+            let totalMissingValue = 0;
+            let allExpensiveCards = [];
 
-            expensiveSection.innerHTML = `
-                <div class="section-title">
-                    <span class="icon">💎</span>
-                    High Value Missing Cards ($50+)
-                    <span style="font-size: 0.9rem; color: #fbbf24; margin-left: auto; font-family: Inter, sans-serif;">
-                        ${totalExpensiveCount} cards • $${totalExpensiveValue.toFixed(2)}
-                    </span>
+            analyzeData.forEach(set => {
+                totalInCollection += set.in_collection;
+                totalMissing += set.missing_count;
+                totalCollectionValue += set.collection_value || 0;
+                totalMissingValue += set.missing_value || 0;
+                if (set.expensive_cards) {
+                    set.expensive_cards.forEach(card => {
+                        allExpensiveCards.push({ ...card, set_name: set.set_name, set_code: set.set_code });
+                    });
+                }
+            });
+
+            allExpensiveCards.sort((a, b) => b.price - a.price);
+
+            let html = `
+                <div class="analyze-summary" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1)); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: #a78bfa;">📊 Collection Summary</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #4ade80;">${totalInCollection.toLocaleString()}</div>
+                            <div style="color: #888; font-size: 0.85rem;">Cards Owned</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #f87171;">${totalMissing.toLocaleString()}</div>
+                            <div style="color: #888; font-size: 0.85rem;">Cards Missing</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #60a5fa;">$${totalCollectionValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            <div style="color: #888; font-size: 0.85rem;">Collection Value</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #fbbf24;">$${totalMissingValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            <div style="color: #888; font-size: 0.85rem;">Cost to Complete</div>
+                        </div>
+                    </div>
                 </div>
-                ${setsWithExpensive.map((set, idx) => {
-                    const setIdx = resultsData.indexOf(set);
-                    return `
-                        <div class="expensive-card">
-                            <div class="expensive-header" onclick="toggleExpensive(${setIdx})">
-                                <span class="expensive-set-name">${set.set_name}</span>
-                                <span class="expensive-count">${set.expensive_cards.length} cards</span>
+
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button class="analyze-format-btn ${analyzeFormat === 'card_kingdom' ? 'active' : ''}" onclick="toggleAnalyzeFormat()">Card Kingdom</button>
+                    <button class="analyze-format-btn ${analyzeFormat === 'starcity' ? 'active' : ''}" onclick="toggleAnalyzeFormat()">Star City Games</button>
+                </div>
+            `;
+
+            html += `<h3 style="margin: 1.5rem 0 1rem; color: #e2e8f0;">📋 Missing Cards by Set</h3>`;
+
+            analyzeData.forEach((set, idx) => {
+                const cardList = analyzeFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
+                const hasCards = cardList && cardList.trim().length > 0;
+
+                html += `
+                    <div class="analyze-set-card" style="background: rgba(30, 30, 40, 0.6); border-radius: 10px; margin-bottom: 1rem; border: 1px solid rgba(139, 92, 246, 0.2);">
+                        <div class="set-header" style="padding: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleAnalyzeSet(${idx})">
+                            <div>
+                                <strong style="color: #a78bfa;">${set.set_name}</strong>
+                                <span style="color: #666; margin-left: 0.5rem;">(${set.set_code.toUpperCase()})</span>
                             </div>
-                            <div class="expensive-body" id="expensiveBody${setIdx}">
-                                <div class="expensive-cards-grid">
-                                    ${set.expensive_cards.map(card => `
-                                        <a href="${card.scryfall_url}" target="_blank" class="expensive-card-item">
-                                            <div class="card-image-wrapper">
-                                                ${card.image_url 
-                                                    ? `<img src="${card.image_url}" alt="${card.name}" class="card-image" loading="lazy">`
-                                                    : `<div class="card-image-placeholder">No Image</div>`
-                                                }
-                                            </div>
-                                            <div class="card-details">
-                                                <span class="card-name">${card.name}</span>
-                                                <span class="card-meta">#${card.collector_number} • ${card.rarity}</span>
-                                                <span class="card-price">$${card.price.toFixed(2)}</span>
-                                            </div>
-                                        </a>
-                                    `).join('')}
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <span style="color: ${set.missing_count === 0 ? '#4ade80' : '#f87171'};">
+                                    ${set.in_collection}/${set.total_in_set} cards
+                                </span>
+                                <span style="color: #fbbf24;">$${(set.missing_value || 0).toFixed(2)}</span>
+                                <span class="expand-icon" id="expandIcon${idx}" style="color: #666;">▼</span>
+                            </div>
+                        </div>
+                        <div class="set-details" id="setDetails${idx}" style="display: none; padding: 0 1rem 1rem;">
+                            ${hasCards ? `
+                                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                    <button class="btn-small" onclick="copyAnalyzeList(${idx})">📋 Copy List</button>
+                                    <button class="btn-small" onclick="downloadAnalyzeList(${idx})">💾 Download</button>
                                 </div>
+                                <textarea readonly style="width: 100%; height: 150px; background: #1a1a2e; border: 1px solid #333; border-radius: 6px; color: #e2e8f0; padding: 0.75rem; font-family: monospace; font-size: 0.85rem; resize: vertical;">${cardList}</textarea>
+                            ` : `<p style="color: #4ade80; padding: 0.5rem 0;">✓ You have all cards from this set!</p>`}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (allExpensiveCards.length > 0) {
+                html += `
+                    <h3 style="margin: 2rem 0 1rem; color: #fbbf24;">💰 High-Value Missing Cards ($50+)</h3>
+                    <div class="expensive-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+                `;
+                allExpensiveCards.forEach(card => {
+                    html += `
+                        <div class="expensive-card" style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 10px; padding: 1rem; display: flex; gap: 1rem;">
+                            ${card.image_url ? `<img src="${card.image_url}" alt="${card.name}" style="width: 80px; height: auto; border-radius: 6px;">` : ''}
+                            <div style="flex: 1;">
+                                <a href="${card.scryfall_url}" target="_blank" style="color: #fbbf24; font-weight: 600; text-decoration: none;">${card.name}</a>
+                                <div style="color: #888; font-size: 0.8rem; margin-top: 0.25rem;">${card.set_name}</div>
+                                <div style="color: #4ade80; font-weight: 700; margin-top: 0.5rem;">$${card.price.toFixed(2)}</div>
+                                <div style="color: #666; font-size: 0.75rem;">${card.rarity} • #${card.collector_number}</div>
                             </div>
                         </div>
                     `;
-                }).join('')}
-            `;
+                });
+                html += `</div>`;
+            }
+
+            resultsDiv.innerHTML = html;
         }
 
-        function toggleExpensive(index) {
-            const body = document.getElementById(`expensiveBody${index}`);
-            body.classList.toggle('open');
+        function toggleAnalyzeSet(idx) {
+            const details = document.getElementById(`setDetails${idx}`);
+            const icon = document.getElementById(`expandIcon${idx}`);
+            if (details.style.display === 'none') {
+                details.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                details.style.display = 'none';
+                icon.textContent = '▼';
+            }
         }
 
-        function toggleSet(index) {
-            const body = document.getElementById(`setBody${index}`);
-            body.classList.toggle('open');
-        }
-
-        function copyToClipboard(index) {
-            const text = currentFormat === 'card_kingdom' 
-                ? resultsData[index].card_kingdom 
-                : resultsData[index].starcity;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Copied to clipboard!');
+        function copyAnalyzeList(idx) {
+            const cardList = analyzeFormat === 'card_kingdom' ? analyzeData[idx].card_kingdom : analyzeData[idx].starcity;
+            navigator.clipboard.writeText(cardList).then(() => {
+                alert('Card list copied to clipboard!');
             });
         }
 
-        function downloadText(index) {
-            const set = resultsData[index];
-            const text = currentFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
-            const filename = `${set.set_name.replace(/[^a-z0-9]/gi, '_')}_missing_${currentFormat}.txt`;
-            
-            const blob = new Blob([text], { type: 'text/plain' });
+        function downloadAnalyzeList(idx) {
+            const set = analyzeData[idx];
+            const cardList = analyzeFormat === 'card_kingdom' ? set.card_kingdom : set.starcity;
+            const blob = new Blob([cardList], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = `${set.set_code}_missing_cards.txt`;
             a.click();
             URL.revokeObjectURL(url);
         }
 
-        // Set Lookup functionality
-        let setLookupData = null;
-
-        async function lookupSet() {
-            const setCode = document.getElementById('setCodeInput').value.trim();
-            if (!setCode) {
-                showLookupError('Please enter a set code');
-                return;
-            }
-
-            document.getElementById('lookupLoading').style.display = 'block';
-            document.getElementById('lookupResults').style.display = 'none';
-            document.getElementById('lookupError').style.display = 'none';
-
+        // Load and display high-value cards showcase
+        async function loadShowcase() {
+            const resultsDiv = document.getElementById('showcaseResults');
+            
             try {
-                const response = await fetch(`/set/${encodeURIComponent(setCode)}`);
+                const response = await fetch('/api/collection');
                 const data = await response.json();
-
+                
                 if (data.error) {
-                    showLookupError(data.error);
+                    resultsDiv.innerHTML = `<p style="text-align: center; color: #f87171;">${data.error}</p>`;
                     return;
                 }
-
-                setLookupData = data;
-                document.getElementById('lookupSetName').textContent = data.set_name;
-                document.getElementById('lookupCardCount').textContent = `${data.card_count} cards`;
-                document.getElementById('lookupCards').textContent = data.cards;
                 
-                document.getElementById('lookupLoading').style.display = 'none';
-                document.getElementById('lookupResults').style.display = 'block';
+                const cards = data.cards || [];
+                const highValueCards = cards
+                    .map(card => {
+                        const prices = card.scryfall_data?.prices || {};
+                        const price = parseFloat(prices.usd || prices.usd_foil || 0);
+                        return { ...card, price };
+                    })
+                    .filter(card => card.price >= 50)
+                    .sort((a, b) => b.price - a.price);
+                
+                if (highValueCards.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: #888;">
+                            <p style="font-size: 1.1rem;">No cards over $50 in your collection yet.</p>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Add more cards to see your high-value collection here!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const totalValue = highValueCards.reduce((sum, c) => sum + (c.price * c.quantity), 0);
+                const totalCards = highValueCards.reduce((sum, c) => sum + c.quantity, 0);
+                
+                let html = `
+                    <div class="showcase-summary">
+                        <div class="showcase-stat">
+                            <div class="showcase-stat-value">${highValueCards.length}</div>
+                            <div class="showcase-stat-label">Unique Cards</div>
+                        </div>
+                        <div class="showcase-stat">
+                            <div class="showcase-stat-value">${totalCards}</div>
+                            <div class="showcase-stat-label">Total Copies</div>
+                        </div>
+                        <div class="showcase-stat">
+                            <div class="showcase-stat-value">$${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            <div class="showcase-stat-label">Total Value</div>
+                        </div>
+                    </div>
+                    <div class="showcase-grid">
+                `;
+                
+                highValueCards.forEach(card => {
+                    const imageUrl = card.scryfall_data?.image_uris?.normal || 
+                                     card.scryfall_data?.image_uris?.small || '';
+                    const scryfallUrl = card.scryfall_data?.scryfall_uri || '#';
+                    const rarity = card.scryfall_data?.rarity || 'unknown';
+                    const collectorNumber = card.collector_number || '';
+                    
+                    html += `
+                        <div class="showcase-card">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${card.name}" loading="lazy">` : ''}
+                            <div class="showcase-card-info">
+                                <div class="showcase-card-name">
+                                    <a href="${scryfallUrl}" target="_blank">${card.name}</a>
+                                </div>
+                                <div class="showcase-card-set">${card.set_name}</div>
+                                <div class="showcase-card-price">$${card.price.toFixed(2)}</div>
+                                <div class="showcase-card-meta">${rarity} · #${collectorNumber}${card.quantity > 1 ? ` · x${card.quantity}` : ''}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+                
             } catch (err) {
-                showLookupError('Failed to fetch set data: ' + err.message);
+                resultsDiv.innerHTML = `<p style="text-align: center; color: #f87171;">Error loading showcase: ${err.message}</p>`;
             }
         }
 
-        function showLookupError(message) {
-            document.getElementById('lookupLoading').style.display = 'none';
-            document.getElementById('lookupResults').style.display = 'none';
-            document.getElementById('lookupError').style.display = 'block';
-            document.getElementById('lookupError').textContent = message;
-        }
-
-        function copySetCards() {
-            if (!setLookupData) return;
-            navigator.clipboard.writeText(setLookupData.cards).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = originalText, 2000);
-            });
-        }
-
-        function downloadSetCards() {
-            if (!setLookupData) return;
-            const filename = `${setLookupData.set_name.replace(/[^a-z0-9]/gi, '_')}_cards.txt`;
-            
-            const blob = new Blob([setLookupData.cards], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Allow enter key to trigger lookup
-        document.getElementById('setCodeInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                lookupSet();
-            }
+        // Load collection on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCollection();
+            analyzeCollection();
+            loadShowcase();
         });
     </script>
 </body>

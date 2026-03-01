@@ -1,19 +1,21 @@
 # MTG Collection Analyzer
 
-Compare your Magic: The Gathering collection against full set data from the [Scryfall API](https://scryfall.com/docs/api) to see which cards you're missing from each set. Available as both a command-line tool and a web application.
+A web application to manage your Magic: The Gathering collection and track missing cards using the [Scryfall API](https://scryfall.com/docs/api).
 
 **Features:**
-- Upload your collection CSV and see missing cards per set
-- View collection value and cost to complete each set
-- Export in Card Kingdom or Star City Games format
-- Identify high-value missing cards ($50+)
-- Set Card Lookup: fetch all cards from any set by code for easy export
+- **Persistent Collection Database**: Store your collection in PostgreSQL with full Scryfall data
+- **Bulk Import**: Import cards from Archidekt CSV exports with automatic data enrichment
+- **Manual Card Entry**: Search and add cards by name or set with owned card indicators
+- **Missing Cards Analysis**: Auto-updating analysis showing missing cards per set
+- **Collection Value Tracking**: See your collection value and cost to complete each set
+- **Card Showcase**: Display your high-value cards ($50+) in a dedicated section
+- **Grid & Table Views**: Browse your collection with sorting and pagination
+- **Export Options**: Copy/download missing card lists in Card Kingdom or Star City Games format
+- **High-Value Missing Cards**: Identify expensive cards you're missing ($50+)
 - Supports all card variants including basic land art variations
 - Beautiful MTG-inspired web interface
 
 ## Web Application
-
-The easiest way to use the analyzer is through the web interface.
 
 ### Run Locally
 
@@ -25,18 +27,76 @@ python app.py
 
 Open http://localhost:5000 in your browser.
 
+**With PostgreSQL (required for full functionality):**
+
+1. Install PostgreSQL and create a database:
+   ```bash
+   brew install postgresql
+   brew services start postgresql
+   createdb mtg_collection
+   ```
+
+2. Set the `DATABASE_URL` environment variable:
+   ```bash
+   export DATABASE_URL="postgresql://localhost/mtg_collection"
+   python app.py
+   ```
+
+Without `DATABASE_URL`, the app runs without database features (collection management disabled).
+
 ### Deploy to Render
 
-This repo includes a `render.yaml` for one-click deployment to [Render](https://render.com):
+This repo includes a `render.yaml` for one-click deployment to [Render](https://render.com) with PostgreSQL:
 
 1. Push this repo to GitHub
-2. Go to [render.com](https://render.com) → New → Web Service
+2. Go to [render.com](https://render.com) → New → Blueprint
 3. Connect your GitHub repo
-4. Render auto-detects the config and deploys
+4. Render auto-detects the config and deploys both the web service and PostgreSQL database
 
-Or configure manually:
+The `render.yaml` automatically:
+- Creates a free PostgreSQL database
+- Sets the `DATABASE_URL` environment variable
+- Deploys the Flask application
+
+**Manual setup:**
 - **Build Command**: `pip install -r requirements.txt`
 - **Start Command**: `cd website && gunicorn app:app`
+- **Environment**: Add `DATABASE_URL` from your PostgreSQL instance
+
+---
+
+## Using the Web App
+
+### Building Your Collection
+
+1. **Bulk Import** - Import cards from an [Archidekt](https://archidekt.com/) CSV export:
+   - Export your collection from Archidekt as CSV
+   - Go to My Collection → Bulk Import
+   - Drop your CSV file to import all cards
+
+2. **Manual Entry** - Search and add cards individually:
+   - Go to My Collection → Add Cards
+   - Search by card name or filter by set code
+   - Cards you already own show a green "Owned" badge
+
+### Viewing Your Collection
+
+- **Grid View**: Visual card display with pagination (20/50/100/All per page)
+- **Table View**: Sortable columns (Name, Set, Rarity, Price)
+- **Filters**: Filter by set or search by card name
+- **Actions**: Adjust quantities or remove cards
+
+### Analyzing Missing Cards
+
+The Missing Cards Analysis section automatically updates when your collection changes:
+- See cards owned vs. total per set
+- View collection value and cost to complete
+- Export missing cards in Card Kingdom or Star City Games format
+- Identify high-value missing cards ($50+)
+
+### Card Showcase
+
+The Card Showcase displays all cards in your collection worth $50 or more, sorted by value.
 
 ---
 
@@ -69,16 +129,16 @@ You can export your collection as a CSV from [Archidekt](https://archidekt.com/)
 2. Use the export option to download your collection as CSV
 3. Save the file to the `collections/` directory
 
-The exported CSV should include **Edition Name** and **Scryfall ID** columns for the analyzer to work.
+The exported CSV should include **Scryfall ID** and **Quantity** columns.
 
 ## Collection CSV Format
 
 Place your collection export in the `collections/` directory. The CSV must include:
 
-- **Edition Name** – Set name (e.g. "Visions", "Mirage")
 - **Scryfall ID** – Card UUID from Scryfall
+- **Quantity** – Number of copies (optional, defaults to 1)
 
-Example columns: `Name`, `Condition`, `Language`, `Edition Name`, `Edition Code`, `Multiverse Id`, `Scryfall ID`, `Collector Number`, `Rarity`
+Example columns: `Name`, `Condition`, `Language`, `Edition Name`, `Edition Code`, `Scryfall ID`, `Collector Number`, `Quantity`
 
 ## Usage
 
@@ -92,13 +152,6 @@ Or with the default file (`collection_2_25_26.csv`):
 
 ```bash
 python missing_cards.py
-```
-
-When run, `get_missing_cards` prints debug output for each set: set name, total cards in set, cards in your collection, and missing count. Example:
-
-```
-[DEBUG] Visions: set=167 | in_collection=37 | missing=130
-[DEBUG] Mirage: set=350 | in_collection=50 | missing=300
 ```
 
 ### Python / Jupyter
@@ -121,20 +174,12 @@ starcity_format = get_missing_cards("collection_2_25_26.csv", format="starcity")
 ck_format = get_missing_cards("collection_2_25_26.csv", format="card_kingdom")
 ```
 
-### Multiple sets
-
-If your CSV has cards from multiple sets, `get_missing_cards` returns one DataFrame per set, each with only the missing cards for that set.
-
 ## Purchasing missing cards
 
-Use the missing cards list from the script to add them to a cart on your preferred deck builder:
+Use the missing cards list to add them to a cart on your preferred deck builder:
 
 - **Card Kingdom** – Use `format="card_kingdom"` to get card names only. Paste into the [Card Kingdom Deck Builder](https://www.cardkingdom.com/builder).
 - **Star City Games** – Use `format="starcity"` to get `Card Name (set_code)` format. Paste into the [Star City Games Deck Builder](https://starcitygames.com/shop/deck-builder/).
-
-1. Run `get_missing_cards("your_collection.csv", format="card_kingdom")` or `format="starcity"`.
-2. Copy the string for the set you want (e.g. `result["Visions"]`).
-3. Paste into the deck builder to build a list and purchase.
 
 ## Project structure
 
