@@ -31,7 +31,7 @@ app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB upload limit
 BASE_DIR = Path(__file__).parent.parent
 SET_NAMES_FILE = BASE_DIR / "set_names.json"
 
-EXPENSIVE_CARD_THRESHOLD_USD = 50.0
+EXPENSIVE_CARD_THRESHOLD_USD = 25.0
 SCRYFALL_BATCH_SIZE = 75  # /cards/collection accepts up to 75 IDs per request
 
 # Optional token-based auth. Set ADMIN_TOKEN env var to enable.

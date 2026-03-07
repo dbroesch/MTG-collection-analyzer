@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent
 COLLECTIONS_DIR = BASE_DIR / "collections"
-EXPENSIVE_CARD_THRESHOLD_USD = 50.0
+EXPENSIVE_CARD_THRESHOLD_USD = 25.0
 
 
 def get_missing_cards(

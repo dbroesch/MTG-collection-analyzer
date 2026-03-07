@@ -8,10 +8,10 @@ A web application to manage your Magic: The Gathering collection and track missi
 - **Manual Card Entry**: Search and add cards by name or set with owned card indicators
 - **Missing Cards Analysis**: Auto-updating analysis showing missing cards per set
 - **Collection Value Tracking**: See your collection value and cost to complete each set
-- **Card Showcase**: Display your high-value cards ($50+) in a dedicated section
+- **Card Showcase**: Display your high-value cards ($25+) in a dedicated section
 - **Grid & Table Views**: Browse your collection with sorting and pagination
 - **Export Options**: Copy/download missing card lists in Card Kingdom or Star City Games format
-- **High-Value Missing Cards**: Identify expensive cards you're missing ($50+)
+- **High-Value Missing Cards**: Identify expensive cards you're missing ($25+)
 - Supports all card variants including basic land art variations
 - Beautiful MTG-inspired web interface
 
@@ -44,28 +44,9 @@ Open http://localhost:5000 in your browser.
 
 Without `DATABASE_URL`, the app runs without database features (collection management disabled).
 
-### Deploy to Render
-
-This repo includes a `render.yaml` for one-click deployment to [Render](https://render.com) with PostgreSQL:
-
-1. Push this repo to GitHub
-2. Go to [render.com](https://render.com) → New → Blueprint
-3. Connect your GitHub repo
-4. Render auto-detects the config and deploys both the web service and PostgreSQL database
-
-The `render.yaml` automatically:
-- Creates a free PostgreSQL database
-- Sets the `DATABASE_URL` environment variable
-- Deploys the Flask application
-
-**Manual setup:**
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `cd website && gunicorn app:app`
-- **Environment**: Add `DATABASE_URL` from your PostgreSQL instance
-
 **Optional: protect the collection API**
 
-Set `ADMIN_TOKEN` to a secret string in your Render environment variables. When set, all collection read/write endpoints require an `X-Admin-Token` header matching that value. Leave it unset for open access (default).
+Set `ADMIN_TOKEN` to a secret string in your environment variables. When set, all collection read/write endpoints require an `X-Admin-Token` header matching that value. Leave it unset for open access (default).
 
 ---
 
@@ -96,11 +77,11 @@ The Missing Cards Analysis section automatically updates when your collection ch
 - See cards owned vs. total per set
 - View collection value and cost to complete
 - Export missing cards in Card Kingdom or Star City Games format
-- Identify high-value missing cards ($50+)
+- Identify high-value missing cards ($25+)
 
 ### Card Showcase
 
-The Card Showcase displays all cards in your collection worth $50 or more, sorted by value.
+The Card Showcase displays all cards in your collection worth $25 or more, sorted by value.
 
 ---
 
@@ -200,8 +181,7 @@ Use the missing cards list to add them to a cart on your preferred deck builder:
 ├── set_names.json             # Set name → code lookup (generated)
 ├── collections/               # Your collection CSV files
 │   └── ...
-├── render.yaml                # Render deployment config
-├── requirements.txt           # Root dependencies (for deployment)
+├── requirements.txt           # Root dependencies
 └── README.md
 ```
 

@@ -1937,7 +1937,7 @@
         <!-- Card Showcase Section -->
         <div class="showcase-section">
             <h2><span class="icon">💎</span> Card Showcase</h2>
-            <p class="section-desc">High-value cards in your collection ($50+)</p>
+            <p class="section-desc">High-value cards in your collection ($25+)</p>
 
             <div id="showcaseResults">
                 <p style="text-align: center; color: #666; padding: 2rem;">Loading showcase...</p>
@@ -2691,7 +2691,7 @@
 
             if (allExpensiveCards.length > 0) {
                 html += `
-                    <h3 style="margin: 2rem 0 1rem; color: #fbbf24;">💰 High-Value Missing Cards ($50+)</h3>
+                    <h3 style="margin: 2rem 0 1rem; color: #fbbf24;">💰 High-Value Missing Cards ($25+)</h3>
                     <div class="expensive-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
                 `;
                 allExpensiveCards.forEach(card => {
@@ -2764,13 +2764,13 @@
                         const price = parseFloat(prices.usd || prices.usd_foil || 0);
                         return { ...card, price };
                     })
-                    .filter(card => card.price >= 50)
+                    .filter(card => card.price >= 25)
                     .sort((a, b) => b.price - a.price);
                 
                 if (highValueCards.length === 0) {
                     resultsDiv.innerHTML = `
                         <div style="text-align: center; padding: 2rem; color: #888;">
-                            <p style="font-size: 1.1rem;">No cards over $50 in your collection yet.</p>
+                            <p style="font-size: 1.1rem;">No cards over $25 in your collection yet.</p>
                             <p style="margin-top: 0.5rem; font-size: 0.9rem;">Add more cards to see your high-value collection here!</p>
                         </div>
                     `;
