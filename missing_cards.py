@@ -3,110 +3,31 @@ Load collection CSV and get missing cards per set. Uses Scryfall API.
 """
 
 import json
+import logging
 import sys
-import time
 from pathlib import Path
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
-from urllib.error import HTTPError
 
 import pandas as pd
 
+from scryfall import ScryfallClient, SET_NAMES_FILE, pull_set_cards
+
+logger = logging.getLogger(__name__)
+
 BASE_DIR = Path(__file__).parent
 COLLECTIONS_DIR = BASE_DIR / "collections"
-SET_NAMES_FILE = BASE_DIR / "set_names.json"
-
-## API connector
-class ScryfallClient:
-    """Scryfall API client. Uses stdlib urllib."""
-
-    def __init__(self, base_url: str = "https://api.scryfall.com", delay_ms: float = 75, timeout: float = 30.0):
-        self.base_url = base_url.rstrip("/")
-        self.headers = {"User-Agent": "MTGSetCollector/1.0", "Accept": "application/json;q=0.9,*/*;q=0.8"}
-        self.delay_sec = delay_ms / 1000.0
-        self.timeout = timeout
-        self._last_request_time = 0.0
-
-    def _rate_limit(self) -> None:
-        elapsed = time.monotonic() - self._last_request_time
-        if elapsed < self.delay_sec:
-            time.sleep(self.delay_sec - elapsed)
-        self._last_request_time = time.monotonic()
-
-    def _request(self, url: str) -> dict:
-        self._rate_limit()
-        req = Request(url, headers=self.headers, method="GET")
-        try:
-            with urlopen(req, timeout=self.timeout) as resp:
-                return json.loads(resp.read().decode())
-        except HTTPError as e:
-            try:
-                data = json.loads(e.read().decode())
-            except Exception:
-                data = {}
-            msg = data.get("details") or data.get("message") or str(e.reason) or "Unknown error"
-            raise RuntimeError(msg) from e
-
-    def get(self, path: str, params: dict | None = None) -> dict:
-        url = f"{self.base_url}{path}" if path.startswith("/") else f"{self.base_url}/{path}"
-        if params:
-            url = f"{url}?{urlencode(params)}"
-        return self._request(url)
-
-    def get_url(self, url: str) -> dict:
-        return self._request(url)
-
-    def get_set(self, set_code: str) -> dict:
-        return self.get(f"/sets/{set_code}")
-
-    def search_cards(self, query: str, page: int = 1) -> dict:
-        return self.get("/cards/search", params={"q": query, "page": page})
+EXPENSIVE_CARD_THRESHOLD_USD = 50.0
 
 
-def _pull_set_cards(set_name: str) -> pd.DataFrame:
-    """Fetch all cards from a set via Scryfall API. Returns DataFrame."""
-    if not SET_NAMES_FILE.exists():
-        raise FileNotFoundError(f"set_names.json not found. Run 'python missing_cards.py sets' first.")
-    with open(SET_NAMES_FILE, encoding="utf-8") as f:
-        name_to_code = json.load(f)
-
-    set_name_clean = set_name.strip()
-    set_code = name_to_code.get(set_name_clean)
-    if set_code is None:
-        set_name_lower = set_name_clean.lower()
-        for name, code in name_to_code.items():
-            if name.lower() == set_name_lower:
-                set_code = code
-                break
-    if set_code is None:
-        raise ValueError(f"Set '{set_name}' not found in set_names.json.")
-
-    set_code = set_code.lower()
-    client = ScryfallClient()
-    set_info = client.get_set(set_code)
-    all_cards = []
-    data = client.search_cards(f"set:{set_code}", page=1)
-
-    while True:
-        all_cards.extend(data.get("data", []))
-        next_page = data.get("next_page")
-        if not next_page:
-            break
-        data = client.get_url(next_page)
-
-    return pd.DataFrame(all_cards)
-
-## Main Function
 def get_missing_cards(
     filename: str,
-    format: str | None = None,
+    output_format: str | None = None,
 ) -> list[pd.DataFrame] | dict[str, str]:
     """
     For each set in the collection CSV, return the cards you're missing.
 
     Args:
         filename: Path to collection CSV.
-        format: If "starcity" or "card_kingdom", return a dict (set name -> string of cards)
+        output_format: If "starcity" or "card_kingdom", return a dict (set name -> string of cards)
                 instead of list of DataFrames. Otherwise return list of DataFrames.
 
     Returns:
@@ -118,21 +39,21 @@ def get_missing_cards(
     for collection_df in collection_dfs:
         edition_name = collection_df["Edition Name"].iloc[0]
         collection_ids = collection_df["Scryfall ID"].dropna().astype(str)
-        full_set_df = _pull_set_cards(edition_name)
+        full_set_df = pull_set_cards(edition_name)
         missing_df = full_set_df[~full_set_df["id"].astype(str).isin(collection_ids)]
         missing_dfs.append(missing_df.reset_index(drop=True))
 
-        # Debug output
-        set_size = len(full_set_df)
-        in_collection = len(collection_df)
-        missing_count = len(missing_df)
-        print(f"[DEBUG] {edition_name}: set={set_size} | in_collection={in_collection} | missing={missing_count}")
+        logger.info(
+            "%s: set=%d | in_collection=%d | missing=%d",
+            edition_name, len(full_set_df), len(collection_df), len(missing_df),
+        )
 
-    if format and format.lower() == "starcity":
+    if output_format and output_format.lower() == "starcity":
         return starcity_format(missing_dfs)
-    if format and format.lower() == "card_kingdom":
+    if output_format and output_format.lower() == "card_kingdom":
         return cardkingdom_format(missing_dfs)
     return missing_dfs
+
 
 ## helper functions
 def load_collection_csv(filename: str) -> list[pd.DataFrame]:
@@ -144,40 +65,32 @@ def load_collection_csv(filename: str) -> list[pd.DataFrame]:
     return [group.reset_index(drop=True) for _, group in df.groupby("Edition Name")]
 
 
-
 def starcity_format(missing_dfs: list[pd.DataFrame]) -> dict[str, str]:
-    """
-    Convert output of get_missing_cards to a dict: set name -> string of cards.
-
-    Each card is formatted as "{card name} ({set_code})" and cards are newline-separated.
-    """
+    """Convert missing card DataFrames to StarCity Games format: set name -> card lines."""
     result = {}
     for df in missing_dfs:
         if len(df) == 0:
             continue
         set_name = df["set_name"].iloc[0]
-        lines = [f"{row['name']} ({row['set']})" for _, row in df.iterrows()]
-        result[set_name] = "\n".join(lines)
+        result[set_name] = "\n".join(
+            f"{name} ({code})" for name, code in zip(df["name"], df["set"])
+        )
     return result
 
 
 def cardkingdom_format(missing_dfs: list[pd.DataFrame]) -> dict[str, str]:
-    """
-    Convert output of get_missing_cards to a dict: set name -> string of card names.
-
-    Values are newline-separated card names only (no set suffix).
-    """
+    """Convert missing card DataFrames to Card Kingdom format: set name -> card names."""
     result = {}
     for df in missing_dfs:
         if len(df) == 0:
             continue
         set_name = df["set_name"].iloc[0]
-        lines = [row["name"] for _, row in df.iterrows()]
-        result[set_name] = "\n".join(lines)
+        result[set_name] = "\n".join(df["name"].tolist())
     return result
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     if len(sys.argv) > 1 and sys.argv[1].lower() in ("sets", "--sets", "-s"):
         client = ScryfallClient()
         sets_data = client.get("/sets").get("data", [])

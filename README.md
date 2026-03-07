@@ -63,6 +63,10 @@ The `render.yaml` automatically:
 - **Start Command**: `cd website && gunicorn app:app`
 - **Environment**: Add `DATABASE_URL` from your PostgreSQL instance
 
+**Optional: protect the collection API**
+
+Set `ADMIN_TOKEN` to a secret string in your Render environment variables. When set, all collection read/write endpoints require an `X-Admin-Token` header matching that value. Leave it unset for open access (default).
+
 ---
 
 ## Using the Web App
@@ -156,7 +160,7 @@ python missing_cards.py
 
 ### Python / Jupyter
 
-`get_missing_cards` takes an optional second argument (`format`). When omitted or `None`, it returns a list of DataFrames (raw card data per set). When set to `"starcity"` or `"card_kingdom"`, it returns a dictionary formatted for pasting into those deck builders.
+`get_missing_cards` takes an optional second argument (`output_format`). When omitted or `None`, it returns a list of DataFrames (raw card data per set). When set to `"starcity"` or `"card_kingdom"`, it returns a dictionary formatted for pasting into those deck builders.
 
 ```python
 from missing_cards import get_missing_cards, load_collection_csv
@@ -168,10 +172,10 @@ for df in missing_dfs:
     print(df[["name", "collector_number", "rarity"]].head())
 
 # Formatted for Star City Games deck builder: set name -> "Card Name (set_code)"
-starcity_format = get_missing_cards("collection_2_25_26.csv", format="starcity")
+starcity_format = get_missing_cards("collection_2_25_26.csv", output_format="starcity")
 
 # Formatted for Card Kingdom deck builder: set name -> card names only
-ck_format = get_missing_cards("collection_2_25_26.csv", format="card_kingdom")
+ck_format = get_missing_cards("collection_2_25_26.csv", output_format="card_kingdom")
 ```
 
 ## Purchasing missing cards
@@ -190,6 +194,7 @@ Use the missing cards list to add them to a cart on your preferred deck builder:
 │   ├── requirements.txt       # Web app dependencies
 │   └── templates/
 │       └── index.html         # Web UI
+├── scryfall.py                # Shared Scryfall API client and utilities
 ├── missing_cards.py           # Command-line script
 ├── collection comparer.ipynb  # Jupyter notebook for analysis
 ├── set_names.json             # Set name → code lookup (generated)
