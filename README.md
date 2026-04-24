@@ -12,6 +12,8 @@ A web application to manage your Magic: The Gathering collection and track missi
 - **Grid & Table Views**: Browse your collection with sorting and pagination
 - **Export Options**: Copy/download missing card lists in Card Kingdom or Star City Games format
 - **High-Value Missing Cards**: Identify expensive cards you're missing ($25+)
+- **Convention Buy Guide**: Per-card buy analysis for all high-value missing cards ($25+) with target price ranges and verdict tiers
+- **Convention Sell Guide**: Sealed product sell analysis with eBay sold pricing, vendor buylist estimates, and selling strategy — based on completed sales only (not listing prices)
 - Supports all card variants including basic land art variations
 - Beautiful MTG-inspired web interface
 
@@ -73,11 +75,24 @@ Set `ADMIN_TOKEN` to a secret string in your environment variables. When set, al
 
 ### Analyzing Missing Cards
 
-The Missing Cards Analysis section automatically updates when your collection changes:
+The Missing Cards Analysis section automatically updates when your collection changes. It has three tabs:
+
+**Missing Cards tab**
 - See cards owned vs. total per set
 - View collection value and cost to complete
 - Export missing cards in Card Kingdom or Star City Games format
 - Identify high-value missing cards ($25+)
+
+**Buy Guide tab**
+- Per-card buy analysis for every high-value missing card ($25+)
+- Target buy price ranges based on TCGPlayer market data
+- 5-tier verdict system (Great Deal → Fair → Slight Premium → High → Pass)
+
+**Sell Guide tab**
+- Sealed product sell analysis for convention/vendor selling
+- eBay sold listing prices (not active listing prices) for 6 sealed products
+- Vendor cash and store credit buylist estimates (70% / 80% of market)
+- Portfolio summary and per-product selling strategy
 
 ### Card Showcase
 

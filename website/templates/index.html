@@ -1681,6 +1681,76 @@
             border-color: transparent;
         }
 
+        /* Convention Buy Guide */
+        .buy-guide-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .buy-guide-card:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .buy-guide-card img {
+            width: 90px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            align-self: flex-start;
+        }
+        .buy-guide-info { flex: 1; min-width: 0; }
+        .buy-guide-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fbbf24;
+            margin-bottom: 0.2rem;
+        }
+        .buy-guide-name a { color: inherit; text-decoration: none; }
+        .buy-guide-name a:hover { text-decoration: underline; }
+        .buy-guide-set { color: #888; font-size: 0.78rem; margin-bottom: 0.75rem; }
+        .buy-guide-prices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .buy-price-box {
+            background: #0d0d0d;
+            border: 1px solid #222;
+            border-radius: 6px;
+            padding: 0.5rem 0.6rem;
+            text-align: center;
+        }
+        .buy-price-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-bottom: 0.2rem; }
+        .buy-price-value { font-size: 0.95rem; font-weight: 700; }
+        .buy-price-value.tcg { color: #60a5fa; }
+        .buy-price-value.target { color: #fbbf24; }
+        .buy-price-value.ck { color: #f87171; }
+        .verdict-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+        .verdict-table td { padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; color: #888; }
+        .verdict-table tr:last-child td { border-bottom: none; }
+        .verdict-table .verdict-label { font-weight: 600; text-align: right; white-space: nowrap; padding-left: 1rem; }
+        .verdict-good { color: #4ade80; }
+        .verdict-fair { color: #fbbf24; }
+        .verdict-pass { color: #f87171; }
+        .buy-guide-summary {
+            background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(139,92,246,0.08));
+            border: 1px solid rgba(251,191,36,0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .buy-guide-card { flex-direction: column; }
+            .buy-guide-card img { width: 70px; }
+            .buy-guide-prices { grid-template-columns: 1fr 1fr; }
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -1801,8 +1871,22 @@
                 </div>
             </div>
 
+            <div class="collection-tabs" id="analyzeTabs">
+                <button class="tab-btn active" id="missingCardsTabBtn" onclick="switchAnalyzeTab('missing')">📋 Missing Cards</button>
+                <button class="tab-btn" id="buyGuideTabBtn" onclick="switchAnalyzeTab('buyguide')">🏪 Buy Guide</button>
+                <button class="tab-btn" id="sellGuideTabBtn" onclick="switchAnalyzeTab('sellguide')">📦 Sell Guide</button>
+            </div>
+
             <div id="analyzeResults">
                 <p style="text-align: center; color: #666; padding: 2rem;">Loading analysis...</p>
+            </div>
+
+            <div id="buyGuideResults" style="display: none;">
+                <p style="text-align: center; color: #666; padding: 2rem;">Loading analysis...</p>
+            </div>
+
+            <div id="sellGuideResults" style="display: none;">
+                <div id="sellGuideContent"></div>
             </div>
         </div>
 
@@ -1958,6 +2042,7 @@
 
     <script>
         // ========== Collection Management ==========
+        let allExpensiveCards = [];
         let collectionData = [];
         let collectionSets = [];
         let searchTimeout = null;
@@ -2610,7 +2695,7 @@
             let totalMissing = 0;
             let totalCollectionValue = 0;
             let totalMissingValue = 0;
-            let allExpensiveCards = [];
+            allExpensiveCards = [];
 
             analyzeData.forEach(set => {
                 totalInCollection += set.in_collection;
@@ -2711,6 +2796,7 @@
             }
 
             resultsDiv.innerHTML = html;
+            renderBuyGuide();
         }
 
         function toggleAnalyzeSet(idx) {
@@ -2742,6 +2828,90 @@
             a.download = `${set.set_code}_missing_cards.txt`;
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        function switchAnalyzeTab(tab) {
+            document.getElementById('missingCardsTabBtn').classList.toggle('active', tab === 'missing');
+            document.getElementById('buyGuideTabBtn').classList.toggle('active', tab === 'buyguide');
+            document.getElementById('sellGuideTabBtn').classList.toggle('active', tab === 'sellguide');
+            document.getElementById('analyzeResults').style.display = tab === 'missing' ? 'block' : 'none';
+            document.getElementById('buyGuideResults').style.display = tab === 'buyguide' ? 'block' : 'none';
+            document.getElementById('sellGuideResults').style.display = tab === 'sellguide' ? 'block' : 'none';
+        }
+
+        function renderBuyGuide() {
+            const resultsDiv = document.getElementById('buyGuideResults');
+            if (!allExpensiveCards || allExpensiveCards.length === 0) {
+                resultsDiv.innerHTML = '<p style="text-align: center; color: #888; padding: 2rem;">No high-value missing cards ($25+) found in your collection gaps.</p>';
+                return;
+            }
+
+            const totalTcg = allExpensiveCards.reduce((sum, c) => sum + c.price, 0);
+            const totalBudget = allExpensiveCards.reduce((sum, c) => sum + (c.price * 1.10), 0);
+
+            let html = `
+                <div class="buy-guide-summary">
+                    <h3 style="color: #fbbf24; margin-bottom: 0.5rem;">🏪 Convention Buy Guide</h3>
+                    <p style="color: #888; font-size: 0.82rem; margin-bottom: 1rem;">Target prices for buying these ${allExpensiveCards.length} missing cards from convention vendors. Verdict tiers based on TCGPlayer market price. Card Kingdom estimate is ~130% of TCGPlayer market.</p>
+                    <div style="display: flex; gap: 2.5rem; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #f87171;">${allExpensiveCards.length}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Cards to Find</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #60a5fa;">$${totalTcg.toFixed(2)}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">TCGPlayer Market Total</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #fbbf24;">~$${totalBudget.toFixed(2)}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Convention Budget Est.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            allExpensiveCards.forEach(card => {
+                const tcg = card.price;
+                const ckEst = (tcg * 1.30).toFixed(2);
+                const targetLow = tcg.toFixed(2);
+                const targetHigh = (tcg * 1.15).toFixed(2);
+                const t90  = (tcg * 0.90).toFixed(0);
+                const t110 = (tcg * 1.10).toFixed(0);
+                const t125 = (tcg * 1.25).toFixed(0);
+
+                html += `
+                    <div class="buy-guide-card">
+                        ${card.image_url ? `<img src="${card.image_url}" alt="${card.name}" loading="lazy">` : ''}
+                        <div class="buy-guide-info">
+                            <div class="buy-guide-name"><a href="${card.scryfall_url}" target="_blank">${card.name}</a></div>
+                            <div class="buy-guide-set">${card.set_name} &middot; ${card.rarity} &middot; #${card.collector_number}</div>
+                            <div class="buy-guide-prices">
+                                <div class="buy-price-box">
+                                    <div class="buy-price-label">TCGPlayer Market</div>
+                                    <div class="buy-price-value tcg">$${tcg.toFixed(2)}</div>
+                                </div>
+                                <div class="buy-price-box">
+                                    <div class="buy-price-label">Target Buy</div>
+                                    <div class="buy-price-value target">$${targetLow}–$${targetHigh}</div>
+                                </div>
+                                <div class="buy-price-box">
+                                    <div class="buy-price-label">CK Est.</div>
+                                    <div class="buy-price-value ck">~$${ckEst}</div>
+                                </div>
+                            </div>
+                            <table class="verdict-table">
+                                <tr><td>Under $${t90}</td><td class="verdict-label verdict-good">Buy immediately</td></tr>
+                                <tr><td>$${t90} – $${t110}</td><td class="verdict-label verdict-good">Good deal</td></tr>
+                                <tr><td>$${t110} – $${t125}</td><td class="verdict-label verdict-fair">Acceptable</td></tr>
+                                <tr><td>$${t125} – $${ckEst}</td><td class="verdict-label verdict-fair">High end</td></tr>
+                                <tr><td>Over $${ckEst}</td><td class="verdict-label verdict-pass">Pass — buy on TCGPlayer</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsDiv.innerHTML = html;
         }
 
         // Load and display high-value cards showcase
@@ -2829,10 +2999,189 @@
         }
 
         // Load collection on page load
+        // ========== Convention Sell Guide ==========
+        const SELL_GUIDE_PRODUCTS = [
+            {
+                name: "Ultimate Masters Booster Box",
+                qty: 1,
+                meta: "24 packs + Box Topper · English · 2018",
+                ebayAvg: 460, ebayLow: 420, ebayHigh: 520,
+                cash: 322, trade: 368,
+                trend: "↑ Stable", trendDir: "up",
+                priority: 1,
+                note: "Box topper must be sealed — missing or opened topper drops value ~$80–100. CK buylist: $377 cash / $490 store credit (implies eBay sell-through ~$440–480 for sealed w/ topper). Listing prices on eBay run higher — only sold listings reflect reality.",
+                noteType: "red"
+            },
+            {
+                name: "Time Spiral Remastered Draft Box",
+                qty: 1,
+                meta: "36 packs · English · 2021",
+                ebayAvg: 375, ebayLow: 325, ebayHigh: 435,
+                cash: 263, trade: 300,
+                trend: "↑↑ +21%/mo", trendDir: "up",
+                priority: 2,
+                note: "Hottest sealed product on the list. CK buylist: $260 cash (limit 18 — actively buying). CK retail $399.99 implies real sold prices $360–$400+. Don't undersell — a motivated buyer at the convention should pay $375–$420.",
+                noteType: "yellow"
+            },
+            {
+                name: "Commander Legends Draft Box",
+                qty: 1,
+                meta: "24 packs · English · 2020 · Original CMR (not CLB)",
+                ebayAvg: 225, ebayLow: 195, ebayHigh: 260,
+                cash: 158, trade: 180,
+                trend: "↑↑ +7%/mo", trendDir: "up",
+                priority: 3,
+                note: "Confirm it's the original Commander Legends (CMR), not Battle for Baldur's Gate (CLB). CK buylist $140 cash — actual sold prices $210–$240. Trending up; good time to sell direct.",
+                noteType: "yellow"
+            },
+            {
+                name: "Legends Booster Pack (Italian)",
+                qty: 1,
+                meta: "15 cards · Italian · 1994 · Single booster pack",
+                ebayAvg: 450, ebayLow: 350, ebayHigh: 700,
+                cash: 315, trade: 360,
+                trend: "Illiquid", trendDir: "flat",
+                priority: 4,
+                note: "Most vendors will low-ball or pass entirely — illiquidity risk is high. Making Mythic sells these at $350 (sale) / $500 (reg). Target a dedicated vintage collector, not a general vendor. Wrapper condition is critical. Wide price variance.",
+                noteType: "red"
+            },
+            {
+                name: "Ikoria: Lair of Behemoths Draft Box",
+                qty: 2,
+                meta: "36 packs · English · 2020",
+                ebayAvg: 205, ebayLow: 185, ebayHigh: 240,
+                cash: 144, trade: 164,
+                trend: "→ Flat", trendDir: "flat",
+                priority: 5,
+                note: "Flat market. Fine to vendor if you can't sell direct. Check for 'No Spacegodzilla' print variant — worth more. Japanese boxes command a significant premium.",
+                noteType: "yellow"
+            },
+            {
+                name: "Core Set 2021 (M21) Draft Box",
+                qty: 2,
+                meta: "36 packs · English · 2020",
+                ebayAvg: 130, ebayLow: 100, ebayHigh: 160,
+                cash: 91, trade: 104,
+                trend: "↑ Mild", trendDir: "up",
+                priority: 6,
+                note: "Low-demand core set. Vendors may be reluctant. Sell direct to players if possible — the margin between vendor cash and eBay avg is narrower here.",
+                noteType: "red"
+            }
+        ];
+
+        function renderSellGuide() {
+            const container = document.getElementById('sellGuideContent');
+            if (!container) return;
+
+            const totalEbayAvg   = SELL_GUIDE_PRODUCTS.reduce((s, p) => s + p.ebayAvg * p.qty, 0);
+            const totalCash      = SELL_GUIDE_PRODUCTS.reduce((s, p) => s + p.cash * p.qty, 0);
+            const totalTrade     = SELL_GUIDE_PRODUCTS.reduce((s, p) => s + p.trade * p.qty, 0);
+            const totalUnits     = SELL_GUIDE_PRODUCTS.reduce((s, p) => s + p.qty, 0);
+
+            let html = `
+                <div style="background: linear-gradient(135deg, rgba(201,162,39,0.08), rgba(139,92,246,0.05)); border: 1px solid rgba(201,162,39,0.2); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 2.5rem; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #4ade80;">$${totalEbayAvg.toLocaleString()}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">eBay Avg (${totalUnits} units)</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #fbbf24;">$${totalCash.toLocaleString()}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Vendor Cash (70%)</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #a78bfa;">$${totalTrade.toLocaleString()}</div>
+                            <div style="color: #888; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Vendor Trade (80%)</div>
+                        </div>
+                        <div style="text-align: center; margin-left: auto; align-self: center; font-size: 0.8rem; color: #888; max-width: 220px; line-height: 1.5;">
+                            Priority sell order: UMA → TSR → Cmdr Legends → Italian Pack → Ikoria → M21
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            SELL_GUIDE_PRODUCTS.forEach(p => {
+                const trendColor = p.trendDir === 'up' ? '#4ade80' : p.trendDir === 'down' ? '#f87171' : '#888';
+                const directTarget85 = Math.round(p.ebayAvg * 0.85);
+                const directTarget90 = Math.round(p.ebayAvg * 0.90);
+                const noteStyle = p.noteType === 'red'
+                    ? 'background: rgba(127,29,29,0.25); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5;'
+                    : 'background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fde68a;';
+
+                html += `
+                    <div style="background: rgba(15,23,42,0.7); border: 1px solid #2a2a3a; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; transition: all 0.3s ease;"
+                         onmouseover="this.style.borderColor='rgba(201,162,39,0.4)'; this.style.transform='translateY(-2px)'"
+                         onmouseout="this.style.borderColor='#2a2a3a'; this.style.transform='translateY(0)'">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 1rem; color: #fff;">
+                                    ${p.name}
+                                    ${p.qty > 1 ? `<span style="background: rgba(139,92,246,0.3); color: #c4b5fd; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; margin-left: 0.5rem;">×${p.qty} units</span>` : ''}
+                                </div>
+                                <div style="color: #666; font-size: 0.78rem; margin-top: 0.2rem;">${p.meta}</div>
+                            </div>
+                            <div style="color: ${trendColor}; font-weight: 600; font-size: 0.85rem; white-space: nowrap;">${p.trend}</div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-bottom: 0.85rem;">
+                            <div style="background: #0d0d0d; border: 1px solid #1e1e2e; border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center;">
+                                <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-bottom: 0.2rem;">eBay Low</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #f87171;">$${p.ebayLow}</div>
+                            </div>
+                            <div style="background: #0d0d0d; border: 1px solid #1e1e2e; border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center;">
+                                <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-bottom: 0.2rem;">eBay Avg</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #60a5fa;">$${p.ebayAvg}${p.qty > 1 ? ' ea.' : ''}</div>
+                            </div>
+                            <div style="background: #0d0d0d; border: 1px solid #1e1e2e; border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center;">
+                                <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-bottom: 0.2rem;">eBay High</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #4ade80;">$${p.ebayHigh}</div>
+                            </div>
+                            <div style="background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center;">
+                                <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 0.2rem;">Vendor Cash (70%)</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #fbbf24;">$${p.cash}${p.qty > 1 ? ' ea.' : ''}</div>
+                            </div>
+                            <div style="background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2); border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center;">
+                                <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 0.2rem;">Vendor Trade (80%)</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #a78bfa;">$${p.trade}${p.qty > 1 ? ' ea.' : ''}</div>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 0.75rem;">
+                            <tr>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; color: #888;">Over $${p.ebayAvg}</td>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; font-weight: 600; color: #4ade80; text-align: right;">Hold — above market, wait for the right buyer</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; color: #888;">$${directTarget90} – $${p.ebayAvg}</td>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; font-weight: 600; color: #4ade80; text-align: right;">Sell — at or near eBay avg, great result</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; color: #888;">$${directTarget85} – $${directTarget90}</td>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; font-weight: 600; color: #fbbf24; text-align: right;">Acceptable — "below eBay" pitch moves product fast</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; color: #888;">$${p.trade} – $${directTarget85}</td>
+                                <td style="padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a1a2e; font-weight: 600; color: #fbbf24; text-align: right;">Low — only if you need to move it today</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.3rem 0.5rem; color: #888;">Under $${p.cash}</td>
+                                <td style="padding: 0.3rem 0.5rem; font-weight: 600; color: #f87171; text-align: right;">Pass — below vendor cash offer, take it elsewhere</td>
+                            </tr>
+                        </table>
+
+                        <div style="${noteStyle} border-radius: 6px; padding: 0.6rem 0.85rem; font-size: 0.78rem; line-height: 1.5;">${p.note}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadCollection();
             analyzeCollection();
             loadShowcase();
+            renderSellGuide();
         });
     </script>
 </body>
