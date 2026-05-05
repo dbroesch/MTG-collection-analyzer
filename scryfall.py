@@ -18,10 +18,35 @@ SET_NAMES_FILE = BASE_DIR / "set_names.json"
 _set_name_cache: dict | None = None
 
 
+SET_CACHE_DIR = BASE_DIR / "set_cache"
+SET_CACHE_TTL_DAYS = 7
+
+
+def _cache_path(set_code: str) -> Path:
+    SET_CACHE_DIR.mkdir(exist_ok=True)
+    return SET_CACHE_DIR / f"{set_code.lower()}.json"
+
+
+def _load_cached_set(set_code: str) -> list[dict] | None:
+    path = _cache_path(set_code)
+    if not path.exists():
+        return None
+    age_days = (time.time() - path.stat().st_mtime) / 86400
+    if age_days > SET_CACHE_TTL_DAYS:
+        return None
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_cached_set(set_code: str, cards: list[dict]) -> None:
+    with open(_cache_path(set_code), "w", encoding="utf-8") as f:
+        json.dump(cards, f)
+
+
 class ScryfallClient:
     """Scryfall API client using stdlib urllib."""
 
-    def __init__(self, base_url: str = "https://api.scryfall.com", delay_ms: float = 75, timeout: float = 30.0):
+    def __init__(self, base_url: str = "https://api.scryfall.com", delay_ms: float = 110, timeout: float = 30.0):
         self.base_url = base_url.rstrip("/")
         self.headers = {"User-Agent": "MTGSetCollector/1.0", "Accept": "application/json;q=0.9,*/*;q=0.8"}
         self.delay_sec = delay_ms / 1000.0
@@ -113,6 +138,12 @@ def pull_set_cards(set_name: str, client: ScryfallClient | None = None) -> pd.Da
         raise ValueError(f"Set '{set_name}' not found in set_names.json.")
 
     set_code = set_code.lower()
+
+    cached = _load_cached_set(set_code)
+    if cached is not None:
+        logger.debug("Cache hit for set %s (%d cards)", set_code, len(cached))
+        return pd.DataFrame(cached)
+
     if client is None:
         client = ScryfallClient()
 
@@ -125,4 +156,6 @@ def pull_set_cards(set_name: str, client: ScryfallClient | None = None) -> pd.Da
             break
         data = client.get_url(next_page)
 
+    _save_cached_set(set_code, all_cards)
+    logger.debug("Fetched and cached set %s (%d cards)", set_code, len(all_cards))
     return pd.DataFrame(all_cards)
